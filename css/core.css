@@ -1,0 +1,9 @@
+:root {
+    /*common across everything*/
+    --color-outline: #D9D3BF;
+    --color-backdrop: #8bb54a;
+    --tileHeight: 8rem;
+    --tileWidth: 8rem;
+  }
+
+  

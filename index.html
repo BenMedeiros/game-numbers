@@ -1,1 +1,81 @@
-<h1>hello world</h1>
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+  <meta charset="utf-8">
+  <title>Game - Numbers/title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="">
+  <meta property="og:type" content="">
+  <meta property="og:url" content="">
+  <meta property="og:image" content="">
+
+  <!--  <link rel="manifest" href="site.webmanifest">-->
+  <link rel="apple-touch-icon" href="icon.png">
+  <!-- Place favicon.ico in the root directory -->
+
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/main.css">
+
+  <meta name="theme-color" content="#fafafa">
+
+</head>
+
+<body>
+
+<script src="js/vendor/modernizr-3.11.2.min.js"></script>
+<script src="js/plugins.js"></script>
+<script src="js/main.js"></script>
+<!--<script src="https://kit.fontawesome.com/974551802e.js" crossorigin="anonymous"></script>-->
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+
+<header>
+
+</header>
+<main>
+
+  <form id="gameConfig" class="collapsible" onsubmit="return false">
+    <h3>
+      <span><i class="material-icons">settings</i> Settings</span>
+    </h3>
+  
+    <label for="numRows">Rows</label>
+    <input type="number" id="numRows" name="numRows">
+    <br/>
+    <label for="numCols">Cols</label>
+    <input type="number" id="numCols" name="numCols">
+    <br/>
+
+    <br/>
+    <input type="submit" value="Update Board" onclick="updateBoard(this)">
+  </form>
+
+  <img src="/img/gifs/pikachu_dancing.gif" style="position:absolute;left:0;bottom:0;height:5rem">
+  <progress value="0" max="1" style="position:absolute;right:1rem;bottom:1rem"></progress>
+
+  <!-- Main gameboard to draw everything on to -->
+  <div id="gameboard" class="gameboard"></div>
+
+</main>
+<footer>
+  <script src="js/main.js"></script>
+</footer>
+<!--&lt;!&ndash; Google Analytics: change UA-XXXXX-Y to be your site's ID. &ndash;&gt;-->
+<!--<script>-->
+<!--  window.ga = function () {-->
+<!--    ga.q.push(arguments)-->
+<!--  };-->
+<!--  ga.q = [];-->
+<!--  ga.l = +new Date;-->
+<!--  ga('create', 'UA-XXXXX-Y', 'auto');-->
+<!--  ga('set', 'anonymizeIp', true);-->
+<!--  ga('set', 'transport', 'beacon');-->
+<!--  ga('send', 'pageview')-->
+<!--</script>-->
+<!--<script src="https://www.google-analytics.com/analytics.js" async></script>-->
+</body>
+
+</html>

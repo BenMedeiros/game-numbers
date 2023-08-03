@@ -2,8 +2,14 @@
   /*common across everything*/
   --color-outline: #D9D3BF;
   --color-backdrop: #8bb54a;
-  --tileHeight: 4rem;
-  --tileWidth: 4rem;
+  --color-backdrop-hover: #45a049;
+  --tileHeight: 5rem;
+  --tileWidth: 5rem;
+
+  --color-card-background: #77746c;
+  --color-white : white;
+  --color-scrollbar: #5b6367;
+  --color-scrollbar-hover: #555;
 }
 
 body {
@@ -58,9 +64,10 @@ i {
   font-size: larger;
   border-radius: 0.5rem;
   position: absolute;
-  transition: background-color 1s ease-in, rotate 1.5s, filter 1.5s, top 2s, left 2s;
+  transition: background-color .3s ease-in, filter 1.5s, top 2s, left 2s;
   z-index: 20;
   background-color: green;
+  color: var(--color-white);
 }
 
 .tile.click1 {

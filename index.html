@@ -22,7 +22,8 @@
   <meta name="theme-color" content="#fafafa">
 
   <link rel="stylesheet" href="css/gameboard/mainboard.css">
-  <link rel="stylesheet" href="css/gameboard/settingsForm.css">
+  <link rel="stylesheet" href="css/gameboard/winScreen.css">
+  <link rel="stylesheet" href="settingsComponent/settingsForm.css">
 
 </head>
 
@@ -53,7 +54,7 @@
     <br/>
 
     <br/>
-    <input type="submit" value="Update Board" onclick="updateBoard(this)">
+    <input id="submit" type="submit" value="New Game">
   </form>
 
   <img src="img/pokemon/gifs/pikachu_dancing.gif" style="position:absolute;left:0;bottom:0;height:5rem">
@@ -64,8 +65,11 @@
 
 </main>
 <footer>
-  <script src="js/services/io.js"></script>
-  <script src="js/main.js"></script>
+  <script type="module">
+    import main from "./js/main.js";
+    document.getElementById('submit').addEventListener('click', () => document.dispatchEvent(new Event('new-game')));
+  </script>
+
 </footer>
 <!--&lt;!&ndash; Google Analytics: change UA-XXXXX-Y to be your site's ID. &ndash;&gt;-->
 <!--<script>-->

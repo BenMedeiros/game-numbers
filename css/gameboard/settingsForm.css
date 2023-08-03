@@ -1,0 +1,105 @@
+:root {
+  --color-menu-backdrop : #2f3032;
+  --color-menu-border : lightgrey;
+  --color-menu-subtext: #888888;
+}
+
+form {
+  background-color: var(--color-menu-backdrop);
+  color: var(--color-menu-border);
+  font-family: Arial;
+  padding: 0 1rem 1rem 1rem;
+  border: 1px solid var(--color-menu-border);
+  border-radius: .5rem;
+  margin: 0.5rem;
+  float: left;
+  width: 15rem;
+  height: auto;
+  display: block;
+  /*position: absolute;*/
+  /*to remain at top of page*/
+  position: fixed;
+  z-index: 100;
+  overflow: hidden;
+  user-select: none;
+  /*can't transition height when its auto*/
+  transition: width .1s;
+}
+
+@media screen and (max-width: 480px) {
+  form label, input, select {
+    /*font-size: 7vw;*/
+  }
+}
+
+form label {
+  text-align: right;
+  display: inline-block;
+  width: 50%;
+  user-select: none;
+}
+
+form input, select {
+  width: 40%;
+  margin: .2rem 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: .5rem;
+  box-sizing: border-box;
+  user-select: auto;
+}
+
+form input:hover, select:hover {
+  border: 1px solid black;
+}
+
+form input[type=submit] {
+  width: 100%;
+  background-color: #4CAF50;
+  color: var(--color-white);
+  padding: 1.1rem 1.3rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+form input[type=submit]:hover {
+  background-color: #45a049;
+  border: 1px solid black;
+}
+
+
+.collapsible {
+  /*overflow: hidden;*/
+}
+
+.collapsed {
+  height: 3rem;
+  width: 8rem;
+  transition: width 1s 1.2s;
+}
+
+
+@media screen and (max-width: 600px) {
+  .expanded {
+    resize: none;
+    height: auto;
+    width: 90%;
+    max-width: 100%;
+    left: 0;
+    right: 0;
+    margin: auto;
+  }
+}
+
+/*used by the js to turn on transitions when collapsing, then removed from element*/
+/*have to transition max-height as well because resize modifies el instance*/
+.collapsing {
+  /*transition: height .4s, width .8s ease-in;*/
+}
+
+.expanding {
+  /*transition: height .8s ease-in, width .2s;*/
+}
+
+

@@ -1,0 +1,85 @@
+:root {
+  /*common across everything*/
+  --color-outline: #D9D3BF;
+  --color-backdrop: #8bb54a;
+  --tileHeight: 4rem;
+  --tileWidth: 4rem;
+}
+
+body {
+  background-size: 50%;
+  background-color: darkgrey;
+  background-image: url(/img/pokemon/backgrounds/background_line_art_1.jpg);
+  background-blend-mode: multiply;
+}
+
+i {
+  vertical-align: bottom;
+}
+
+.gameboard {
+  /*game board specific*/
+  --gameboard-buffer-x: calc(var(--tileWidth) / 1.5);
+  --gameboard-buffer-y: calc(var(--tileHeight) / 1.5);
+  --num-cols: 4;
+  --num-rows: 4;
+  background-color: var(--color-outline);
+  filter: drop-shadow(2px 4px 6px black);
+
+  border-color: var(--color-backdrop);
+  border-width: calc(var(--tileWidth) * .4);
+  border-style: solid;
+  /*centers when position:absolute*/
+  position: absolute;
+  /*put the game board slightly lower for header bar*/
+  /*give room on right side for scoreboard*/
+  margin: 5rem 5rem auto auto;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  height: calc(var(--num-rows) * var(--tileHeight) + 2 * var(--gameboard-buffer-y));
+  width: calc(var(--num-cols) * var(--tileWidth) + 2 * var(--gameboard-buffer-x));
+  z-index: -100;
+}
+
+.tile {
+  /*tile x/y are set per tile*/
+  --tile-x: -1;
+  --tile-y: -1;
+  top: calc(var(--tileHeight) * var(--tile-y) + var(--gameboard-buffer-y));
+  left: calc(var(--tileWidth) * var(--tile-x) + var(--gameboard-buffer-x));
+  width: var(--tileWidth);
+  height: var(--tileHeight);
+  padding: 0;
+  /*background-color: darkseagreen;*/
+  /*border-color: green;*/
+  border-width: thick;
+  font-size: larger;
+  border-radius: 0.5rem;
+  position: absolute;
+  transition: background-color 1s ease-in, rotate 1.5s, filter 1.5s, top 2s, left 2s;
+  z-index: 20;
+  background-color: green;
+}
+
+.tile.click1 {
+  border-color: darkblue;
+  background-color: blue;
+  color: var(--color-white);
+  border-width: unset;
+}
+
+.tile.click2 {
+  border-color: darkred;
+  background-color: red;
+  color: var(--color-white);
+  border-width: unset;
+}
+
+
+
+.tile:hover {
+  border-color: darkgreen;
+  border-width: .1rem;
+}

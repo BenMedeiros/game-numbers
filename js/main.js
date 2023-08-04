@@ -8,6 +8,7 @@ import gameStateManager from "./game/gameStateManager.js";
 import settingsController from "../settingsComponent/settingsController.js";
 import winScreen from "./ui/winScreen.js";
 import {randomInt} from "./common/utils.js";
+import {saveCompletedGame} from "./game/gameHistory.js";
 
 const gameConfig = {
     numCols: 4,
@@ -18,18 +19,14 @@ const gameConfig = {
 const gameData = {
     gameboardElement: null,
     tiles: [],
-    stateClick1: 10,
+    stateClick1: 0,
     stateClick2: 0,
     headerTiles: [],
     startTime: new Date(),
-    endTime: null,
     timeElapsed: 0,
     intervalId: null
 };
 
-const gameConfigHandler = io.bindConfigToStorage('gameConfig', gameConfig);
-gameConfigHandler.loadConfigFromStorage();
-gameConfigHandler.populateUiSettingsFromConfig();
 
 function updateBoard() {
     clearTiles(gameData.tiles);
@@ -44,11 +41,6 @@ function updateBoard() {
     drawTileElements(gameData.gameboardElement, gameData);
     gameStateManager.listenForGameComplete(gameData);
 
-    gameData.startTime = new Date();
-
-    gameData.intervalId = setInterval(() => {
-        gameData.timeElapsed = (new Date() - gameData.startTime) / 1000;
-    }, 100);
 
     document.addEventListener('game-won', saveAndLogTime, {once: true});
 
@@ -63,9 +55,11 @@ function updateBoard() {
 }
 
 function saveAndLogTime() {
-    gameData.endTime = new Date();
-    gameData.timeElapsed = (gameData.endTime - gameData.startTime) / 1000;
-    console.log(gameConfig.gameId, gameData.startTime, gameData.endTime, gameData.timeElapsed);
+    gameData.timeElapsed = (new Date() - gameData.startTime) / 1000;
+    console.log(gameConfig.gameId, gameData.startTime, gameData.timeElapsed);
+
+    saveCompletedGame(gameConfig, gameData);
+
     gameConfig.gameId = randomInt(0, 1 << 30);
     gameConfigHandler.populateUiSettingsFromConfig();
     clearInterval(gameData.intervalId);
@@ -73,7 +67,16 @@ function saveAndLogTime() {
 
 document.addEventListener('new-game', () => {
     console.log('new-game');
+
+    gameData.startTime = new Date();
+    gameData.stateClick1 = 0;
+    gameData.stateClick2 = 0;
+
     clearInterval(gameData.intervalId);
+    gameData.intervalId = setInterval(() => {
+        gameData.timeElapsed = (new Date() - gameData.startTime) / 1000;
+    }, 51);
+
     document.removeEventListener('game-won', saveAndLogTime, {once: true});
 
     gameConfigHandler.readUiSettingsIntoConfig();
@@ -81,6 +84,10 @@ document.addEventListener('new-game', () => {
 
     updateBoard();
 });
+
+const gameConfigHandler = io.bindConfigToStorage('gameConfig', gameConfig);
+gameConfigHandler.loadConfigFromStorage();
+gameConfigHandler.populateUiSettingsFromConfig();
 
 
 // start

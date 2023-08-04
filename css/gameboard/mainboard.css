@@ -1,92 +1,134 @@
 :root {
-  /*common across everything*/
-  --color-outline: #D9D3BF;
-  --color-backdrop: #8bb54a;
-  --color-backdrop-hover: #45a049;
-  --tileHeight: 5rem;
-  --tileWidth: 5rem;
+    /*common across everything*/
+    --color-outline: #D9D3BF;
+    --color-backdrop: #8bb54a;
+    --color-backdrop-hover: #45a049;
+    --tileHeight: 3rem;
+    --tileWidth: 3rem;
 
-  --color-card-background: #77746c;
-  --color-white : white;
-  --color-scrollbar: #5b6367;
-  --color-scrollbar-hover: #555;
+    --color-card-background: #77746c;
+    --color-white: white;
+    --color-scrollbar: #5b6367;
+    --color-scrollbar-hover: #555;
 }
 
 body {
-  background-size: 50%;
-  background-color: darkgrey;
-  background-image: url(/img/pokemon/backgrounds/background_line_art_1.jpg), url(/game-numbers/img/pokemon/backgrounds/background_line_art_1.jpg);
-  background-blend-mode: multiply;
+    background-size: 50%;
+    background-color: darkgrey;
+    background-image: url(/img/pokemon/backgrounds/background_line_art_1.jpg), url(/game-numbers/img/pokemon/backgrounds/background_line_art_1.jpg);
+    background-blend-mode: multiply;
 }
 
 i {
-  vertical-align: bottom;
+    vertical-align: bottom;
 }
 
 .gameboard {
-  /*game board specific*/
-  --gameboard-buffer-x: calc(var(--tileWidth) / 1.5);
-  --gameboard-buffer-y: calc(var(--tileHeight) / 1.5);
-  --num-cols: 4;
-  --num-rows: 4;
-  background-color: var(--color-outline);
-  filter: drop-shadow(2px 4px 6px black);
+    /*game board specific*/
+    --num-cols: 4;
+    --num-rows: 4;
+    background-color: var(--color-outline);
+    filter: drop-shadow(2px 4px 6px black);
 
-  border-color: var(--color-backdrop);
-  border-width: calc(var(--tileWidth) * .4);
-  border-style: solid;
-  /*centers when position:absolute*/
-  position: absolute;
-  /*put the game board slightly lower for header bar*/
-  /*give room on right side for scoreboard*/
-  margin: 5rem 5rem auto auto;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  top: 0;
-  height: calc(var(--num-rows) * var(--tileHeight) + 2 * var(--gameboard-buffer-y));
-  width: calc(var(--num-cols) * var(--tileWidth) + 2 * var(--gameboard-buffer-x));
-  z-index: -100;
+    border-color: var(--color-backdrop);
+    border-width: calc(var(--tileWidth) * .4);
+    border-style: solid;
+    /*centers when position:absolute*/
+    position: absolute;
+    margin: auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    height: calc((2 + var(--num-rows)) * var(--tileHeight));
+    width: calc((2 + var(--num-cols)) * var(--tileWidth));
+    z-index: -100;
 }
 
 .tile {
-  /*tile x/y are set per tile*/
-  --tile-x: -1;
-  --tile-y: -1;
-  top: calc(var(--tileHeight) * var(--tile-y) + var(--gameboard-buffer-y));
-  left: calc(var(--tileWidth) * var(--tile-x) + var(--gameboard-buffer-x));
-  width: var(--tileWidth);
-  height: var(--tileHeight);
-  padding: 0;
-  /*background-color: darkseagreen;*/
-  /*border-color: green;*/
-  border-width: thick;
-  font-size: larger;
-  border-radius: 0.5rem;
-  position: absolute;
-  transition: background-color .3s ease-in, filter 1.5s, top 2s, left 2s;
-  z-index: 20;
-  background-color: green;
-  color: var(--color-white);
+    /*tile x/y are set per tile*/
+    --tile-x: -1;
+    --tile-y: -1;
+    top: calc(var(--tileHeight) * (1.5 + var(--tile-y)));
+    left: calc(var(--tileWidth) * (1.5 + var(--tile-x)));
+    width: var(--tileWidth);
+    height: var(--tileHeight);
+    padding: 0;
+    /*background-color: darkseagreen;*/
+    /*border-color: green;*/
+    border-width: thick;
+    font-size: larger;
+    border-radius: 0.5rem;
+    position: absolute;
+    transition: background-color .3s ease-in, filter 1.5s, top 2s, left 2s;
+    z-index: 20;
+    background-color: green;
+    color: var(--color-white);
 }
 
 .tile.click1 {
-  border-color: darkblue;
-  background-color: blue;
-  color: var(--color-white);
-  border-width: unset;
+    border-color: darkblue;
+    background-color: blue;
+    color: var(--color-white);
+    border-width: unset;
 }
 
 .tile.click2 {
-  border-color: darkred;
-  background-color: red;
-  color: var(--color-white);
-  border-width: unset;
+    border-color: darkred;
+    background-color: red;
+    color: var(--color-white);
+    border-width: unset;
 }
 
-
-
 .tile:hover {
-  border-color: darkgreen;
-  border-width: .1rem;
+    border-color: darkgreen;
+    border-width: .1rem;
+}
+
+.header-tile {
+    background-color: var(--color-outline);
+    color: black;
+    --tile-x: -1;
+    --tile-y: -1;
+    --chain-length-x: 0;
+    --chain-length-y: 0;
+    top: calc(var(--tileHeight) * (1.5 + var(--tile-y) - .5*var(--chain-length-y)));
+    left: calc(var(--tileWidth) * (1.5 + var(--tile-x) - var(--chain-length-x)));
+    width: var(--tileWidth);
+    height: var(--tileHeight);
+    position: absolute;
+    z-index: 20;
+    padding: 0;
+}
+
+ul.header-tile.vertical {
+    list-style: none;
+    margin: 0;
+}
+
+ul.header-tile.horizontal {
+    list-style: none;
+    direction: rtl;
+}
+
+ul.header-tile.vertical > li {
+    text-align-last: center;
+    padding: 5px;
+}
+
+ul.header-tile.horizontal > li {
+    margin-right: 1rem; /* add spacing between items */
+    /*display: inline-block; !* horizontal list *!*/
+    display: contents;
+    float: right;
+    padding: 5px;
+}
+
+li > .badge {
+    background-color: grey;
+    color: #fff;
+    border-radius: 50%;
+    padding: 5px 10px;
+    text-align: center;
+    margin: 5px;
 }

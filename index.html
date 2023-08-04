@@ -67,6 +67,7 @@
 <footer>
   <script type="module">
     import main from "./js/main.js";
+    console.log(main.getGameData());
     document.getElementById('submit').addEventListener('click', () => document.dispatchEvent(new Event('new-game')));
   </script>
 

@@ -5,7 +5,7 @@ export  {
     randomFrom,
     between,
     randomizeArray,
-    roundToPrecisionString
+    roundToPrecisionString,
 }
 
 //random from min to max inclusive

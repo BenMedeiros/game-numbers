@@ -67,12 +67,30 @@ function drawTileElements(gameboardElement, gameData) {
     }
 
     for (const headerTile of gameData.headerTiles) {
-        const el = document.createElement("div");
-        el.classList.add('tile');
+        const el = document.createElement("ul");
+
+        el.classList.add('header-tile');
+        if(headerTile.x === -1) {
+            el.classList.add('horizontal');
+        }else{
+            el.classList.add('vertical');
+            el.style.setProperty('--chain-length-y', headerTile.chain.length+'');
+        }
+
         el.id = headerTile.id;
+        el.title = headerTile.id;
         el.style.setProperty('--tile-x', headerTile.x);
         el.style.setProperty('--tile-y', headerTile.y);
-        el.textContent = headerTile.text;
+
+        for(const value of headerTile.chain){
+            const listEl = document.createElement("li");
+            const badgeEl = document.createElement("span");
+            badgeEl.classList.add('badge');
+            badgeEl.innerText = value;
+            listEl.appendChild(badgeEl);
+            el.appendChild(listEl);
+        }
+
         fragment.appendChild(el);
     }
 

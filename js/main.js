@@ -8,7 +8,7 @@ import settingsController from "../settingsComponent/settingsController.js";
 import winScreen from "./ui/winScreen.js";
 
 export default {
-    getGameConfig: () => gameConfig
+    getGameData: () => gameData
 }
 
 const gameConfig = {

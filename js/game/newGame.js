@@ -42,7 +42,7 @@ function createHeaderTiles(headerTiles, gameConfig) {
             id: 'headerTile'+headerTiles.length,
             x,
             y: -1,
-            text: headerTiles.length+ ':::'
+            chain: []
         });
     }
 
@@ -51,7 +51,7 @@ function createHeaderTiles(headerTiles, gameConfig) {
             id: 'headerTile'+headerTiles.length,
             x: -1,
             y,
-            text: headerTiles.length+ ':::'
+            chain: []
         });
     }
 }
@@ -65,13 +65,13 @@ function calculateHeaderTileText(gameConfig, tiles, headerTiles) {
                 chain++;
             } else {
                 if (chain !== 0) {
-                    headerTiles[x].text += ' ' + chain;
+                    headerTiles[x].chain.push(chain);
                     chain = 0;
                 }
             }
         }
 
-        if(chain !== 0) headerTiles[x].text += ' ' + chain;
+        if(chain !== 0) headerTiles[x].chain.push(chain);
     }
     //populate the left side headers
     for (let y = 0; y < gameConfig.numRows; y++) {
@@ -81,12 +81,12 @@ function calculateHeaderTileText(gameConfig, tiles, headerTiles) {
                 chain++;
             } else {
                 if (chain !== 0) {
-                    headerTiles[gameConfig.numCols + y].text += ' ' + chain;
+                    headerTiles[gameConfig.numCols + y].chain.push(chain);
                     chain = 0;
                 }
             }
         }
 
-        if(chain !== 0) headerTiles[gameConfig.numCols + y].text += ' ' + chain;
+        if(chain !== 0) headerTiles[gameConfig.numCols + y].chain.push(chain);
     }
 }

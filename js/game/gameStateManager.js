@@ -1,6 +1,7 @@
 'use strict';
 
 import TILE_STATES from "./tile_states.js";
+import {updateTileElementState} from "../ui/gameboardElements.js";
 
 export default {
     tileClicked1,
@@ -34,37 +35,35 @@ function evalGameComplete(gameData){
 }
 
 function tileClicked1(tile){
-    const el = document.getElementById(tile.id);
+    const el = document.getElementById(tile.elId);
 
     if (tile.state === TILE_STATES.UNCLICKED) {
-        el.classList.add('click1');
         tile.state = TILE_STATES.CLICK1;
     } else if (tile.state === TILE_STATES.CLICK1) {
-        el.classList.remove('click1');
         tile.state = TILE_STATES.UNCLICKED;
     } else if (tile.state === TILE_STATES.CLICK2) {
-        el.classList.remove('click2');
         tile.state = TILE_STATES.UNCLICKED;
     } else {
         throw new Error('Impossible');
     }
+
+    updateTileElementState(tile, el);
 }
 
 function tileClicked2(tile){
-    const el = document.getElementById(tile.id);
+    const el = document.getElementById(tile.elId);
 
     if (tile.state === TILE_STATES.UNCLICKED) {
-        el.classList.add('click2');
         tile.state = TILE_STATES.CLICK2;
     } else if (tile.state === TILE_STATES.CLICK1) {
-        el.classList.remove('click1');
         tile.state = TILE_STATES.UNCLICKED;
     } else if (tile.state === TILE_STATES.CLICK2) {
-        el.classList.remove('click2');
         tile.state = TILE_STATES.UNCLICKED;
     } else {
         throw new Error('Impossible');
     }
+
+    updateTileElementState(tile, el);
 }
 
 function listenForGameComplete(gameData){

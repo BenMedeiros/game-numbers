@@ -3,9 +3,10 @@
 import TILE_STATES from "../game/tile_states.js";
 import {roundToPrecisionString} from "../common/utils.js";
 
-export default {
+export  {
     drawTileElements,
-    newGameBoardElement
+    newGameBoardElement,
+    updateTileElementState
 }
 
 function newGameBoardElement(gameConfig, gameData) {
@@ -43,17 +44,36 @@ function clearGameBoardElements(gameboardElement) {
     }
 }
 
+function updateTileElementState(tile, el){
+    if (tile.state === TILE_STATES.UNCLICKED) {
+        el.classList.remove('click1');
+        el.classList.remove('click2');
+    } else if (tile.state === TILE_STATES.CLICK1) {
+        el.classList.add('click1');
+        el.classList.remove('click2');
+    } else if (tile.state === TILE_STATES.CLICK2) {
+        el.classList.add('click2');
+        el.classList.remove('click1');
+    } else {
+        throw new Error('Impossible');
+    }
+
+
+}
+
 function drawTileElements(gameboardElement, gameData) {
     const fragment = document.createDocumentFragment();
 
     for (const tile of gameData.tiles) {
         const el = document.createElement("button");
         el.classList.add('tile');
-        el.id = tile.id;
-        el.title = tile.id + ':' + tile.isFilled;
+        el.id = tile.elId;
+        el.innerText = tile.id;
+        el.title = tile.elId + ':' + tile.isFilled;
 
         el.style.setProperty('--tile-x', tile.x);
         el.style.setProperty('--tile-y', tile.y);
+        updateTileElementState(tile, el);
 
         fragment.appendChild(el);
         el.onclick = (e) => {

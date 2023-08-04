@@ -1,39 +1,10 @@
 'use strict';
 
-import {randomFrom} from "../common/utils.js";
-
 console.log('new game');
-import TILE_STATES from "./tile_states.js";
 
-export default {
-    createTiles,
-    clearTiles,
+export  {
     createHeaderTiles,
     calculateHeaderTileText
-}
-
-function createTile(tiles, x, y) {
-    return {
-        id: 'tile'+tiles.length,
-        x,
-        y,
-        state: TILE_STATES.UNCLICKED,
-        isFilled: false // is the tile valid aka part of the numbers
-    };
-}
-
-function clearTiles(tiles) {
-    tiles.length = 0;
-}
-
-function createTiles(tiles, gameConfig) {
-    for (let x = 0; x < gameConfig.numCols; x++) {
-        for (let y = 0; y < gameConfig.numRows; y++) {
-            const tile = createTile(tiles, x, y);
-            tile.isFilled = randomFrom([true, true, false]);
-            tiles.push(tile);
-        }
-    }
 }
 
 function createHeaderTiles(headerTiles, gameConfig) {

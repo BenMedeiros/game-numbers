@@ -13,14 +13,50 @@ import {saveCompletedGame} from "./game/gameHistory.js";
 const gameConfig = {
     numCols: 4,
     numRows: 5,
-    gameId: 0
+    gameId: '',
+    //gameId is a int[] so that any number of tiles can be supported
+    gameIdPartitioned: []
 };
+
+Object.defineProperties(gameConfig, {
+    gameId: {
+        get() {
+            return this.gameIdPartitioned.join('-');
+        },
+        set(gameId) {
+            this.gameIdPartitioned.length = 0;
+            //each byte/int supports 30 tiles, so remove gameId excess since it'll never be used
+            const lengthRequired = Math.ceil(this.numCols * this.numRows / 30);
+            const maxLengthInLastPartition = ((this.numCols * this.numRows) - 1) % 30;
+
+            const strArray = String(gameId).split('-');
+            for (const str of strArray) {
+                //10 char numbers is roughly what int32 can hold
+                for (let i = 0; i < str.length; i += 10) {
+                    this.gameIdPartitioned.push(parseInt(str.substr(i, i + 10)));
+                }
+            }
+
+            //if this is more than needed to describe the square, truncate
+            if (this.gameIdPartitioned.length > lengthRequired) {
+                this.gameIdPartitioned.length = lengthRequired;
+            }
+            //only need this many tiles/bits in the last partition
+            this.gameIdPartitioned[this.gameIdPartitioned.length - 1] %= (1 << maxLengthInLastPartition);
+
+            console.log(lengthRequired, this.gameIdPartitioned, maxLengthInLastPartition, 1 << maxLengthInLastPartition);
+        }
+    }
+});
+
+console.log(gameConfig);
 
 const gameData = {
     gameboardElement: null,
     tiles: [],
-    stateClick1: 0,
-    stateClick2: 0,
+    //states are also int[] since they are binary holders like gameId
+    stateClick1: new Array(gameConfig.gameIdPartitioned.length).fill(0),
+    stateClick2: new Array(gameConfig.gameIdPartitioned.length).fill(0),
     headerTiles: [],
     startTime: new Date(),
     timeElapsed: 0,
@@ -39,19 +75,9 @@ function updateBoard() {
     calculateHeaderTileText(gameConfig, gameData.tiles, gameData.headerTiles);
 
     drawTileElements(gameData.gameboardElement, gameData);
-    gameStateManager.listenForGameComplete(gameData);
-
+    gameStateManager.listenForGameComplete(gameData, gameConfig);
 
     document.addEventListener('game-won', saveAndLogTime, {once: true});
-
-
-    const mainTags = document.getElementsByTagName("main");
-    if (mainTags.length !== 1) throw new Error('should only be 1 main tag in body');
-    const mainTag = mainTags[0];
-
-    if (gameConfig.gameId > 1 << 30) console.warn('Single int limit exceeded');
-    console.log(gameConfig.gameId);
-
 }
 
 function saveAndLogTime() {
@@ -60,17 +86,21 @@ function saveAndLogTime() {
 
     saveCompletedGame(gameConfig, gameData);
 
-    gameConfig.gameId = randomInt(0, 1 << 30);
-    gameConfigHandler.populateUiSettingsFromConfig();
     clearInterval(gameData.intervalId);
 }
 
 document.addEventListener('new-game', () => {
     console.log('new-game');
 
+    gameConfigHandler.readUiSettingsIntoConfig();
+
+    gameConfig.gameId = randomInt(0, 1 << 30) + '-' + randomInt(0, 1 << 30);
+    gameConfigHandler.populateUiSettingsFromConfig();
+    gameConfigHandler.saveConfigToStorage();
+
     gameData.startTime = new Date();
-    gameData.stateClick1 = 0;
-    gameData.stateClick2 = 0;
+    gameData.stateClick1 = new Array(gameConfig.gameIdPartitioned.length).fill(0);
+    gameData.stateClick2 = new Array(gameConfig.gameIdPartitioned.length).fill(0);
 
     clearInterval(gameData.intervalId);
     gameData.intervalId = setInterval(() => {
@@ -79,8 +109,6 @@ document.addEventListener('new-game', () => {
 
     document.removeEventListener('game-won', saveAndLogTime, {once: true});
 
-    gameConfigHandler.readUiSettingsIntoConfig();
-    gameConfigHandler.saveConfigToStorage();
 
     updateBoard();
 });

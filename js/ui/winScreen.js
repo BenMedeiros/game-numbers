@@ -1,6 +1,13 @@
 'use strict';
 
-function createWinScreen() {
+import {appendLabelAndInput} from "../html/tinyComponents.js";
+import {getBestTimeForSize} from "../game/gameHistory.js";
+
+const mainTags = document.getElementsByTagName("main");
+if (mainTags.length !== 1) throw new Error('should only be 1 main tag in body');
+const mainTag = mainTags[0];
+
+function createWinScreen(event) {
     if (winScreenOpen) return;
 
     const el = document.createElement("div");
@@ -8,15 +15,20 @@ function createWinScreen() {
     el.classList.add('win-screen');
     el.innerText = 'YOU WIN';
 
+    appendLabelAndInput(el, 'rows', 'Rows', event.detail.gameConfig.numRows);
+    appendLabelAndInput(el, 'cols', 'Cols', event.detail.gameConfig.numCols);
+    appendLabelAndInput(el, 'gameId', 'Game Id', event.detail.gameConfig.gameId);
+    appendLabelAndInput(el, 'timeElapsed', 'Time', event.detail.gameData.timeElapsed);
+    appendLabelAndInput(el, 'bestTime', 'Record', getBestTimeForSize(event.detail.gameConfig));
+
+
     const btnNewGame = document.createElement("button");
     btnNewGame.classList.add('new-game');
     btnNewGame.innerText = 'New Game';
     btnNewGame.onclick = () => document.dispatchEvent(new Event('new-game'));
     el.appendChild(btnNewGame);
 
-    const mainTags = document.getElementsByTagName("main");
-    if (mainTags.length !== 1) throw new Error('should only be 1 main tag in body');
-    mainTags[0].appendChild(el);
+    mainTag.appendChild(el);
     winScreenOpen = true;
 
     //not allowing off screen close-click for now
@@ -25,7 +37,7 @@ function createWinScreen() {
 }
 
 function closeWinScreen() {
-    if(!winScreenOpen) return;
+    if (!winScreenOpen) return;
     console.log('closing');
     const oldGameboardElement = document.getElementById("win-screen");
     oldGameboardElement.remove();

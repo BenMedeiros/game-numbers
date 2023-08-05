@@ -9,27 +9,31 @@ export default {
     listenForGameComplete
 }
 
-function evalGameComplete(gameData){
+function evalGameComplete(gameData, gameConfig){
     let userWin = true;
-    for (const tile of gameData.tiles) {
-        if(tile.isFilled){
-            //    tile is filled and user is wrong
-            if(tile.state !== TILE_STATES.CLICK1) {
-                userWin = false;
-                break;
-            }
-        }else{
-            //tile is not filled and user is wrong
-            if(tile.state === TILE_STATES.CLICK1){
-                userWin = false;
-                break;
-            }
-        }
+    // for (const tile of gameData.tiles) {
+    //     if(tile.isFilled){
+    //         //    tile is filled and user is wrong
+    //         if(tile.state !== TILE_STATES.CLICK1) {
+    //             userWin = false;
+    //             break;
+    //         }
+    //     }else{
+    //         //tile is not filled and user is wrong
+    //         if(tile.state === TILE_STATES.CLICK1){
+    //             userWin = false;
+    //             break;
+    //         }
+    //     }
+    // }
+
+    for (let i = 0; i < gameConfig.gameIdPartitioned.length; i++) {
+        if(gameConfig.gameIdPartitioned[i] !== gameData.stateClick1[i]) userWin = false;
     }
 
     if(userWin) {
         console.log('YOU WIN');
-        document.dispatchEvent(new CustomEvent('game-won', { detail: {  } }));
+        document.dispatchEvent(new CustomEvent('game-won', { detail: { gameData, gameConfig } }));
     }
 
 }
@@ -66,14 +70,13 @@ function tileClicked2(tile){
     updateTileElementState(tile, el);
 }
 
-function listenForGameComplete(gameData){
-    console.log('listeners active');
+function listenForGameComplete(gameData, gameConfig){
      gameData.gameboardElement.addEventListener('tile-clicked-1', e => {
         tileClicked1(e.detail.tile);
-        evalGameComplete(gameData);
+        evalGameComplete(gameData, gameConfig);
     });
     gameData.gameboardElement.addEventListener('tile-clicked-2', e => {
         tileClicked2(e.detail.tile);
-        evalGameComplete(gameData);
+        evalGameComplete(gameData, gameConfig);
     });
 }

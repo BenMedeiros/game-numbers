@@ -35,18 +35,25 @@ form {
 form label {
   text-align: right;
   display: inline-block;
-  width: 50%;
+  width: 40%;
   user-select: none;
+  padding-right: 4%;
 }
 
 form input, select {
-  width: 40%;
+  width: 50%;
   margin: .2rem 0;
   display: inline-block;
   border: 1px solid #ccc;
   border-radius: .5rem;
   box-sizing: border-box;
   user-select: auto;
+}
+
+form input:read-only {
+  border: 0;
+  box-shadow: none;
+  background-color: var(--color-menu-subtext);
 }
 
 form input:hover, select:hover {

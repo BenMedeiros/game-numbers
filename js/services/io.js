@@ -37,7 +37,7 @@ function bindConfigToStorage(configKey, configObject) {
         const formElement = document.getElementById(configKey);
         const formData = new FormData(formElement);
         for (const [key, value] of Object.entries(configObject)) {
-            console.log(key, value, formData.get(key));
+            // console.log(key, value, formData.get(key));
             if (formData.get(key) === null) continue;
             if (typeof (value) === 'number') {
                 configObject[key] = Number(formData.get(key));

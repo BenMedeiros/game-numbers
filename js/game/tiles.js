@@ -16,10 +16,9 @@ function createTiles(tiles, gameConfig, gameData) {
     for (let x = 0; x < gameConfig.numCols; x++) {
         for (let y = 0; y < gameConfig.numRows; y++) {
             const tile = {
-                id: 1 << tiles.length,
+                id: tiles.length,
                 x,
                 y,
-                state: TILE_STATES.UNCLICKED,
             };
 
             Object.defineProperties(tile, {
@@ -31,17 +30,15 @@ function createTiles(tiles, gameConfig, gameData) {
                 },
                 isFilled: {
                     get() {
-                        // gameId stores binary of which tiles are filled
-                        // bitwise OR is non zero if match
-                        return (gameConfig.gameId & this.id) > 0
+                        return isTileInState(this.id, gameConfig.gameIdPartitioned);
                     }
                 },
                 state: {
                     get() {
                         //    state is stored like isFilled, showing current user clicks
-                        if ((gameData.stateClick1 & this.id) > 0) {
+                        if (isTileInState(this.id, gameData.stateClick1)) {
                             return TILE_STATES.CLICK1;
-                        } else if ((gameData.stateClick2 & this.id) > 0) {
+                        } else if (isTileInState(this.id, gameData.stateClick2)) {
                             return TILE_STATES.CLICK2;
                         } else {
                             return TILE_STATES.UNCLICKED;
@@ -49,6 +46,7 @@ function createTiles(tiles, gameConfig, gameData) {
                     },
                     set(newState) {
                         updateGameDataClickState(gameData, this, newState);
+                        console.log(gameConfig.gameIdPartitioned, gameData.stateClick1, gameData.stateClick2);
                     }
                 }
             });
@@ -58,23 +56,45 @@ function createTiles(tiles, gameConfig, gameData) {
     }
 }
 
+function isTileInState(tileId, stateArray){
+    //find the partition this tile lives in
+    const partitionIndex = Math.floor(tileId / 30);
+    const tileBitIndex = 1 << (tileId % 30);
+
+    const pState = stateArray[partitionIndex]
+    // gameId stores binary of which tiles are filled
+    // bitwise AND is non zero if match
+    return (pState & tileBitIndex) > 0
+}
+
+function setTileStateToTrue(tileId, stateArray){
+    const partitionIndex = Math.floor(tileId / 30);
+    const tileBitIndex = 1 << (tileId % 30);
+    // [int in the array][bit in the int]
+    stateArray[partitionIndex] |= tileBitIndex;
+}
+
+function setTileStateToFalse(tileId, stateArray){
+    const partitionIndex = Math.floor(tileId / 30);
+    const tileBitIndex = 1 << (tileId % 30);
+    // [int in the array][bit in the int]
+    stateArray[partitionIndex] &= ~tileBitIndex;
+}
+
 //update tile.state (aka gameData.state) to a specific state (ignores user flow paths)
 function updateGameDataClickState(gameData, tile, newState) {
     if (tile.state === newState) {
         //    nothing needed
     } else if (newState === TILE_STATES.UNCLICKED) {
-        // set click1's bit to 1 and click2's to 0
-        gameData.stateClick1 = gameData.stateClick1 & ~tile.id;
-        gameData.stateClick2 = gameData.stateClick2 & ~tile.id;
+        setTileStateToFalse(tile.id, gameData.stateClick1);
+        setTileStateToFalse(tile.id, gameData.stateClick2);
 
     } else if (newState === TILE_STATES.CLICK1) {
-        // set click1's bit to 1 and click2's to 0
-        gameData.stateClick1 = gameData.stateClick1 | tile.id;
-        gameData.stateClick2 = gameData.stateClick2 & ~tile.id;
+        setTileStateToTrue(tile.id, gameData.stateClick1);
+        setTileStateToFalse(tile.id, gameData.stateClick2);
 
     } else if (newState === TILE_STATES.CLICK2) {
-        // set click2's bit to 1 and click1's to 0
-        gameData.stateClick2 = gameData.stateClick2 | tile.id;
-        gameData.stateClick1 = gameData.stateClick1 & ~tile.id;
+        setTileStateToTrue(tile.id, gameData.stateClick2);
+        setTileStateToFalse(tile.id, gameData.stateClick1);
     }
 }

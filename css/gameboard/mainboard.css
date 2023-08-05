@@ -23,6 +23,7 @@ i {
     vertical-align: bottom;
 }
 
+
 .gameboard {
     /*game board specific*/
     --num-cols: 4;

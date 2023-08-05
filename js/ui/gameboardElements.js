@@ -3,7 +3,7 @@
 import TILE_STATES from "../game/tile_states.js";
 import {roundToPrecisionString} from "../common/utils.js";
 
-export  {
+export {
     drawTileElements,
     newGameBoardElement,
     updateTileElementState
@@ -19,7 +19,7 @@ function newGameBoardElement(gameConfig, gameData) {
 
     el.style.setProperty('--num-cols', gameConfig.numCols);
     el.style.setProperty('--num-rows', gameConfig.numRows);
-    el.style.setProperty('--tile-size', gameConfig.tileSize+'rem');
+    el.style.setProperty('--tile-size', gameConfig.tileSize + 'rem');
 
     const timerEl = document.createElement("div");
     timerEl.id = 'timer';
@@ -45,7 +45,7 @@ function clearGameBoardElements(gameboardElement) {
     }
 }
 
-function updateTileElementState(tile, el){
+function updateTileElementState(tile, el) {
     if (tile.state === TILE_STATES.UNCLICKED) {
         el.classList.remove('click1');
         el.classList.remove('click2');
@@ -87,43 +87,43 @@ function drawTileElements(gameboardElement, gameData) {
         });
     }
 
-    let maxChainY = 0;
-    let maxChainX = 0;
-    for (const headerTile of gameData.headerTiles) {
-        const el = document.createElement("ul");
 
-        el.classList.add('header-tile');
-        if(headerTile.x === -1) {
-            el.classList.add('horizontal');
-            el.style.setProperty('--chain-length-x', headerTile.chain.length+'');
-            if(headerTile.chain.length > maxChainX) maxChainX = headerTile.chain.length;
-        }else{
-            el.classList.add('vertical');
-            el.style.setProperty('--chain-length-y', headerTile.chain.length+'');
-            if(headerTile.chain.length > maxChainY) maxChainY = headerTile.chain.length;
-        }
+    drawHeaderTileElements(gameData, gameboardElement, fragment);
 
-        el.id = headerTile.id;
-        el.title = headerTile.id;
-        el.style.setProperty('--tile-x', headerTile.x);
-        el.style.setProperty('--tile-y', headerTile.y);
-
-        for(const value of headerTile.chain){
-            const listEl = document.createElement("li");
-            const badgeEl = document.createElement("span");
-            badgeEl.classList.add('badge');
-            badgeEl.innerText = value;
-            listEl.appendChild(badgeEl);
-            el.appendChild(listEl);
-        }
-
-        fragment.appendChild(el);
-    }
-
-    gameboardElement.style.setProperty('--max-chain-length-x', maxChainX+'');
-    gameboardElement.style.setProperty('--max-chain-length-y', maxChainY+'');
     gameboardElement.appendChild(fragment);
 
 }
 
+function drawHeaderTileElements(gameData, gameboardElement, fragment) {
+    //max chain is to know how much space to add for header elements of left/top
+    let maxChainY = 0;
+    let maxChainX = 0;
+    for (const headerTile of gameData.headerTiles) {
+        if (headerTile.type === 'left') {
+            if (headerTile.chain.length > maxChainX) maxChainX = headerTile.chain.length;
+        } else {
+            if (headerTile.chain.length > maxChainY) maxChainY = headerTile.chain.length;
+        }
 
+        for (let i = 0; i < headerTile.chain.length; i++) {
+            const el = document.createElement("div");
+            el.innerText = headerTile.chain[i];
+
+            if (headerTile.type === 'left') {
+                el.classList.add('left-header-tile');
+                el.style.setProperty('--tile-x', String((i - headerTile.chain.length) / 2));
+                el.style.setProperty('--tile-y', headerTile.y);
+            } else {
+                el.classList.add('top-header-tile');
+                el.style.setProperty('--tile-x', headerTile.x);
+                el.style.setProperty('--tile-y', String((i - headerTile.chain.length) / 2));
+                if (headerTile.chain.length > maxChainY) maxChainY = headerTile.chain.length;
+            }
+
+            fragment.appendChild(el);
+        }
+    }
+
+    gameboardElement.style.setProperty('--max-chain-length-x', maxChainX + '');
+    gameboardElement.style.setProperty('--max-chain-length-y', maxChainY + '');
+}

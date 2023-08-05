@@ -11,6 +11,7 @@ function createHeaderTiles(headerTiles, gameConfig) {
     for (let x = 0; x < gameConfig.numCols; x++) {
         headerTiles.push({
             id: 'headerTile'+headerTiles.length,
+            type: 'top',
             x,
             y: -1,
             chain: []
@@ -20,6 +21,7 @@ function createHeaderTiles(headerTiles, gameConfig) {
     for (let y = 0; y < gameConfig.numRows; y++) {
         headerTiles.push({
             id: 'headerTile'+headerTiles.length,
+            type: 'left',
             x: -1,
             y,
             chain: []

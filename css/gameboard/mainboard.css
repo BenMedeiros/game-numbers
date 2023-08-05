@@ -3,8 +3,6 @@
     --color-outline: #D9D3BF;
     --color-backdrop: #8bb54a;
     --color-backdrop-hover: #45a049;
-    --tileHeight: 3rem;
-    --tileWidth: 3rem;
 
     --color-card-background: #77746c;
     --color-white: white;
@@ -28,11 +26,15 @@ i {
     /*game board specific*/
     --num-cols: 4;
     --num-rows: 4;
+    --tile-length: 5vw;
+    --max-chain-length-x: 0;
+    --max-chain-length-y: 0;
+
     background-color: var(--color-outline);
     filter: drop-shadow(2px 4px 6px black);
 
     border-color: var(--color-backdrop);
-    border-width: calc(var(--tileWidth) * .4);
+    border-width: calc(var(--tile-length) * .4);
     border-style: solid;
     /*centers when position:absolute*/
     position: absolute;
@@ -41,27 +43,31 @@ i {
     right: 0;
     bottom: 0;
     top: 0;
-    height: calc((2 + var(--num-rows)) * var(--tileHeight));
-    width: calc((2 + var(--num-cols)) * var(--tileWidth));
+    height: calc((var(--num-rows) + .8*var(--max-chain-length-y)) * var(--tile-length));
+    width: calc((var(--num-cols) + .8*var(--max-chain-length-x)) * var(--tile-length));
+    aspect-ratio: 1;
+    /*width: 80%;*/
     z-index: -100;
+    /*transform: scale(1);*/
 }
 
 .tile {
     /*tile x/y are set per tile*/
     --tile-x: -1;
     --tile-y: -1;
-    top: calc(var(--tileHeight) * (1.5 + var(--tile-y)));
-    left: calc(var(--tileWidth) * (1.5 + var(--tile-x)));
-    width: var(--tileWidth);
-    height: var(--tileHeight);
-    padding: 0;
+    top: calc(var(--tile-length) * (var(--tile-y) + .8*var(--max-chain-length-y)));
+    left: calc(var(--tile-length) * (var(--tile-x) + .8*var(--max-chain-length-x)));
+    width: var(--tile-length);
+    aspect-ratio: 1;
+    /*height: var(--tile-length);*/
+    /*padding: 0;*/
     /*background-color: darkseagreen;*/
     /*border-color: green;*/
     border-width: thick;
     font-size: larger;
     border-radius: 0.5rem;
     position: absolute;
-    transition: background-color .3s ease-in, filter 1.5s, top 2s, left 2s;
+    /*transition: background-color .3s ease-in, filter 1.5s, top 2s, left 2s;*/
     z-index: 20;
     background-color: green;
     color: var(--color-white);
@@ -87,27 +93,29 @@ i {
 }
 
 .header-tile {
-    background-color: var(--color-outline);
+    /*background-color: var(--color-outline);*/
     color: black;
     --tile-x: -1;
     --tile-y: -1;
     --chain-length-x: 0;
     --chain-length-y: 0;
-    top: calc(var(--tileHeight) * (1.5 + var(--tile-y) - .5*var(--chain-length-y)));
-    left: calc(var(--tileWidth) * (1.5 + var(--tile-x) - var(--chain-length-x)));
-    width: var(--tileWidth);
-    height: var(--tileHeight);
+    width: var(--tile-length);
+    height: var(--tile-length);
     position: absolute;
     z-index: 20;
     padding: 0;
 }
 
 ul.header-tile.vertical {
+    top: calc(var(--tile-length) * (.5 + var(--tile-y) + .3 * var(--max-chain-length-y)));
+    left: calc(var(--tile-length) * (var(--tile-x) + .8*var(--max-chain-length-x)));
     list-style: none;
     margin: 0;
 }
 
 ul.header-tile.horizontal {
+    top: calc(var(--tile-length) * (var(--tile-y) + .8*var(--max-chain-length-y)));
+    left: calc(var(--tile-length) * (var(--tile-x) + .8*var(--max-chain-length-x)));
     list-style: none;
     direction: rtl;
 }

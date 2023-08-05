@@ -30,10 +30,6 @@ function createWinScreen(event) {
 
     mainTag.appendChild(el);
     winScreenOpen = true;
-
-    //not allowing off screen close-click for now
-    //needs a delay because its still in the click event bubble sometimes
-    // setTimeout(() => document.addEventListener('click', closeWinScreen), 100);
 }
 
 function closeWinScreen() {

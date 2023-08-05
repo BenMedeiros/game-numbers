@@ -86,15 +86,20 @@ function drawTileElements(gameboardElement, gameData) {
         });
     }
 
+    let maxChainY = 0;
+    let maxChainX = 0;
     for (const headerTile of gameData.headerTiles) {
         const el = document.createElement("ul");
 
         el.classList.add('header-tile');
         if(headerTile.x === -1) {
             el.classList.add('horizontal');
+            el.style.setProperty('--chain-length-x', headerTile.chain.length+'');
+            if(headerTile.chain.length > maxChainX) maxChainX = headerTile.chain.length;
         }else{
             el.classList.add('vertical');
             el.style.setProperty('--chain-length-y', headerTile.chain.length+'');
+            if(headerTile.chain.length > maxChainY) maxChainY = headerTile.chain.length;
         }
 
         el.id = headerTile.id;
@@ -114,6 +119,8 @@ function drawTileElements(gameboardElement, gameData) {
         fragment.appendChild(el);
     }
 
+    gameboardElement.style.setProperty('--max-chain-length-x', maxChainX+'');
+    gameboardElement.style.setProperty('--max-chain-length-y', maxChainY+'');
     gameboardElement.appendChild(fragment);
 
 }

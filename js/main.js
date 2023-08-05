@@ -41,6 +41,11 @@ Object.defineProperties(gameConfig, {
             if (this.gameIdPartitioned.length > lengthRequired) {
                 this.gameIdPartitioned.length = lengthRequired;
             }
+            //if there are not enough partitions create some randoms
+            while(this.gameIdPartitioned.length < lengthRequired){
+                this.gameIdPartitioned.push(randomInt(0, 1 << 30));
+            }
+
             //only need this many tiles/bits in the last partition
             this.gameIdPartitioned[this.gameIdPartitioned.length - 1] %= (1 << maxLengthInLastPartition);
 

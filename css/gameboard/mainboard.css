@@ -26,7 +26,7 @@ i {
     /*game board specific*/
     --num-cols: 4;
     --num-rows: 4;
-    --tile-length: 5vw;
+    --tile-length: 3rem;
     --max-chain-length-x: 0;
     --max-chain-length-y: 0;
 

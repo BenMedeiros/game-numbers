@@ -26,7 +26,7 @@ i {
     /*game board specific*/
     --num-cols: 4;
     --num-rows: 4;
-    --tile-length: 3rem;
+    --tile-size: 2rem;
     --max-chain-length-x: 0;
     --max-chain-length-y: 0;
 
@@ -34,7 +34,7 @@ i {
     filter: drop-shadow(2px 4px 6px black);
 
     border-color: var(--color-backdrop);
-    border-width: calc(var(--tile-length) * .4);
+    border-width: calc(var(--tile-size) * .4);
     border-style: solid;
     /*centers when position:absolute*/
     position: absolute;
@@ -43,8 +43,8 @@ i {
     right: 0;
     bottom: 0;
     top: 0;
-    height: calc((var(--num-rows) + .8*var(--max-chain-length-y)) * var(--tile-length));
-    width: calc((var(--num-cols) + .8*var(--max-chain-length-x)) * var(--tile-length));
+    height: calc((var(--num-rows) + .8*var(--max-chain-length-y)) * var(--tile-size));
+    width: calc((var(--num-cols) + .8*var(--max-chain-length-x)) * var(--tile-size));
     aspect-ratio: 1;
     /*width: 80%;*/
     z-index: -100;
@@ -55,11 +55,11 @@ i {
     /*tile x/y are set per tile*/
     --tile-x: -1;
     --tile-y: -1;
-    top: calc(var(--tile-length) * (var(--tile-y) + .8*var(--max-chain-length-y)));
-    left: calc(var(--tile-length) * (var(--tile-x) + .8*var(--max-chain-length-x)));
-    width: var(--tile-length);
+    top: calc(var(--tile-size) * (var(--tile-y) + .8*var(--max-chain-length-y)));
+    left: calc(var(--tile-size) * (var(--tile-x) + .8*var(--max-chain-length-x)));
+    width: var(--tile-size);
     aspect-ratio: 1;
-    /*height: var(--tile-length);*/
+    /*height: var(--tile-size);*/
     /*padding: 0;*/
     /*background-color: darkseagreen;*/
     /*border-color: green;*/
@@ -99,30 +99,30 @@ i {
     --tile-y: -1;
     --chain-length-x: 0;
     --chain-length-y: 0;
-    width: var(--tile-length);
-    height: var(--tile-length);
+    width: var(--tile-size);
+    height: var(--tile-size);
     position: absolute;
     z-index: 20;
     padding: 0;
 }
 
 ul.header-tile.vertical {
-    top: calc(var(--tile-length) * (.5 + var(--tile-y) + .3 * var(--max-chain-length-y)));
-    left: calc(var(--tile-length) * (var(--tile-x) + .8*var(--max-chain-length-x)));
+    top: calc(var(--tile-size) * (1.5 + var(--tile-y) + .1* var(--max-chain-length-y)));
+    left: calc(var(--tile-size) * (var(--tile-x) + .8*var(--max-chain-length-x)));
     list-style: none;
     margin: 0;
 }
 
 ul.header-tile.horizontal {
-    top: calc(var(--tile-length) * (var(--tile-y) + .8*var(--max-chain-length-y)));
-    left: calc(var(--tile-length) * (var(--tile-x) + .8*var(--max-chain-length-x)));
+    top: calc(var(--tile-size) * ( var(--tile-y) + 0 + .8*var(--max-chain-length-y)));
+    left: calc(var(--tile-size) * (var(--tile-x) + .8*var(--max-chain-length-x)));
     list-style: none;
     direction: rtl;
 }
 
 ul.header-tile.vertical > li {
     text-align-last: center;
-    padding: 5px;
+    padding: calc(var(--tile-size) / 15);
 }
 
 ul.header-tile.horizontal > li {
@@ -137,7 +137,7 @@ li > .badge {
     background-color: grey;
     color: #fff;
     border-radius: 50%;
-    padding: 5px 10px;
+    padding: calc(var(--tile-size) / 8) calc(var(--tile-size) / 5);
     text-align: center;
-    margin: 5px;
+    font-size: calc(var(--tile-size) / 4);
 }

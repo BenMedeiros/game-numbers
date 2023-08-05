@@ -13,6 +13,7 @@ import {saveCompletedGame} from "./game/gameHistory.js";
 const gameConfig = {
     numCols: 4,
     numRows: 5,
+    tileSize: 3,
     gameId: '',
     //gameId is a int[] so that any number of tiles can be supported
     gameIdPartitioned: []

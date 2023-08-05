@@ -19,6 +19,7 @@ function newGameBoardElement(gameConfig, gameData) {
 
     el.style.setProperty('--num-cols', gameConfig.numCols);
     el.style.setProperty('--num-rows', gameConfig.numRows);
+    el.style.setProperty('--tile-size', gameConfig.tileSize+'rem');
 
     const timerEl = document.createElement("div");
     timerEl.id = 'timer';

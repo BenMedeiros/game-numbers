@@ -4,6 +4,11 @@
   --color-menu-subtext: #888888;
 }
 
+form, form * {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
 form {
   background-color: var(--color-menu-backdrop);
   color: var(--color-menu-border);
@@ -21,7 +26,6 @@ form {
   position: fixed;
   z-index: 100;
   overflow: hidden;
-  user-select: none;
   /*can't transition height when its auto*/
   transition: width .1s;
 }
@@ -36,7 +40,6 @@ form label {
   text-align: right;
   display: inline-block;
   width: 40%;
-  user-select: none;
   padding-right: 4%;
 }
 
@@ -47,7 +50,6 @@ form input, select {
   border: 1px solid #ccc;
   border-radius: .5rem;
   box-sizing: border-box;
-  user-select: auto;
 }
 
 form input:read-only {

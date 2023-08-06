@@ -12,12 +12,14 @@ import {randomInt} from "./common/utils.js";
 import {saveCompletedGame} from "./game/gameHistory.js";
 import gameConfig from "./game/gameConfig.js";
 import gameData from "./game/gameData.js";
+import {createTimerElement} from "./ui/timerElement.js";
 
 function updateBoard() {
     clearTiles(gameData.tiles);
     clearTiles(gameData.headerTiles);
 
     newGameBoardElement(gameConfig, gameData);
+    createTimerElement(gameData);
 
     createTiles(gameData.tiles, gameConfig, gameData);
     createHeaderTiles(gameData.headerTiles, gameConfig);

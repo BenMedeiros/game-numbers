@@ -1,6 +1,6 @@
 'use strict';
 
-import {randomFrom} from "../common/utils.js";
+import {saveMoveHistory} from "./moveHistory.js";
 
 export {
     createTiles,
@@ -84,7 +84,12 @@ function setTileStateToFalse(tileId, stateArray) {
 function updateGameDataClickState(gameData, tile, newState) {
     if (tile.state === newState) {
         //    nothing needed
-    } else if (newState === 'unclicked') {
+        return;
+    }
+
+    saveMoveHistory(tile, newState, gameData);
+
+    if (newState === 'unclicked') {
         setTileStateToFalse(tile.id, gameData.stateClick1);
         setTileStateToFalse(tile.id, gameData.stateClick2);
 

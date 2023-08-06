@@ -4,7 +4,7 @@ import {roundToPrecisionString} from "../common/utils.js";
 import {leftClickOrDrag, onTouchLongPress, rightClickOrDrag} from "../html/interactionHelpers.js";
 import {
     setInitialDraggedState,
-    updateTileStateAndElementDrag
+    updateTileStateAndElementDrag, updateTileStateAndElementToClick2
 } from "../game/gameStateManager.js";
 
 export {
@@ -23,20 +23,6 @@ function newGameBoardElement(gameConfig, gameData) {
     el.style.setProperty('--num-cols', gameConfig.numCols);
     el.style.setProperty('--num-rows', gameConfig.numRows);
     el.style.setProperty('--tile-size', gameConfig.tileSize + 'rem');
-
-    const timerEl = document.createElement("div");
-    timerEl.id = 'timer';
-    timerEl.classList.add('timer');
-    timerEl.innerText = '0';
-    el.appendChild(timerEl);
-
-    const intervalId = setInterval(() => {
-        timerEl.innerText = roundToPrecisionString(gameData.timeElapsed, 2) + ' s';
-    }, 100);
-
-    document.addEventListener('new-game', () => {
-        setTimeout(() => clearInterval(intervalId), 100);
-    }, {once: true});
 
     oldGameboardElement.parentNode.replaceChild(el, oldGameboardElement);
     gameData.gameboardElement = el;
@@ -79,8 +65,7 @@ function drawTileElements(gameboardElement, gameData) {
         });
 
         onTouchLongPress(el, 700, () => {
-            setInitialDraggedState('unclicked');
-            updateTileStateAndElementDrag(tile, el, 'click2');
+            updateTileStateAndElementToClick2(tile, el);
         });
     }
 

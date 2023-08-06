@@ -30,18 +30,48 @@ export function setInitialDraggedState(state) {
 
 export function updateTileStateAndElementDrag(tile, el, clickTo) {
     if (getInitialDraggedState() === 'unclicked') {
-        tile.state = clickTo;
         if (clickTo === 'click1') {
-            el.classList.add('click1');
-            el.classList.remove('click2');
+            updateTileStateAndElementToClick1(tile, el);
         } else {
-            el.classList.add('click2');
-            el.classList.remove('click1');
+            updateTileStateAndElementToClick2(tile, el);
         }
     } else {
-        tile.state = 'unclicked';
-        el.classList.remove('click1');
-        el.classList.remove('click2');
+        updateTileStateAndElementToUnclicked(tile, el);
     }
+}
+
+export function updateTileStateAndElementToClick1(tile, el) {
+    tile.state = 'click1';
+    el.classList.add('click1');
+    el.classList.remove('click2');
     evalGameComplete();
+}
+
+export function updateTileStateAndElementToClick2(tile, el) {
+    tile.state = 'click2';
+    el.classList.remove('click1');
+    el.classList.add('click2');
+    evalGameComplete();
+}
+
+export function updateTileStateAndElementToUnclicked(tile, el) {
+    tile.state = 'unclicked';
+    el.classList.remove('click1');
+    el.classList.remove('click2');
+    evalGameComplete();
+}
+
+export function updateTileState(tile, state) {
+    const el = document.getElementById(tile.elId);
+    console.log('update', tile, state );
+
+    if (state === 'unclicked') {
+        updateTileStateAndElementToUnclicked(tile, el);
+    } else if (state === 'click1') {
+        updateTileStateAndElementToClick1(tile, el);
+    } else if (state === 'click2') {
+        updateTileStateAndElementToClick2(tile, el);
+    } else {
+        throw new Error('bad state');
+    }
 }

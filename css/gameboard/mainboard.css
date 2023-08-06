@@ -21,6 +21,10 @@ i {
     vertical-align: bottom;
 }
 
+.gameboard * {
+    user-select: none;
+    -webkit-user-select: none;
+}
 
 .gameboard {
     /*game board specific*/
@@ -71,7 +75,6 @@ i {
     z-index: 20;
     background-color: green;
     color: var(--color-white);
-    user-select: none;
 }
 
 .tile.click1 {

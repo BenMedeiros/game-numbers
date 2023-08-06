@@ -18,7 +18,7 @@ export function evalGameComplete() {
 }
 
 //saves what state the user is dragging thru multiple tiles
-let initialDragTileState = 0;
+let initialDragTileState = null;
 
 export function getInitialDraggedState() {
     return initialDragTileState;
@@ -28,7 +28,7 @@ export function setInitialDraggedState(state) {
     initialDragTileState = state;
 }
 
-export function updateTileStateAndElement(tile, el, clickTo) {
+export function updateTileStateAndElementDrag(tile, el, clickTo) {
     if (getInitialDraggedState() === 'unclicked') {
         tile.state = clickTo;
         if (clickTo === 'click1') {

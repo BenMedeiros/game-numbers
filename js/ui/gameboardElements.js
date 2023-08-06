@@ -1,10 +1,10 @@
 'use strict';
 
 import {roundToPrecisionString} from "../common/utils.js";
-import {leftClickOrDrag, rightClickOrDrag} from "../html/interactionHelpers.js";
+import {leftClickOrDrag, onTouchLongPress, rightClickOrDrag} from "../html/interactionHelpers.js";
 import {
     setInitialDraggedState,
-    updateTileStateAndElement
+    updateTileStateAndElementDrag
 } from "../game/gameStateManager.js";
 
 export {
@@ -65,26 +65,23 @@ function drawTileElements(gameboardElement, gameData) {
 
         fragment.appendChild(el);
 
-        el.addEventListener('mousedown', () => setInitialDraggedState(tile.state));
-
-        leftClickOrDrag(el, () => {
-            updateTileStateAndElement(tile, el, 'click1');
-        });
-
-        rightClickOrDrag(el, () => {
-            updateTileStateAndElement(tile, el, 'click2')
-        });
-
         //disable generic right click menu
         el.oncontextmenu = e => e.preventDefault();
 
-        el.ontouchmove = (e) => {
-            console.log('touch move' + tile.id);
-        }
+        el.addEventListener('mousedown', () => setInitialDraggedState(tile.state));
 
-        el.ontouchstart = (e) => {
-            console.log('touch start' + tile.id);
-        }
+        leftClickOrDrag(el, () => {
+            updateTileStateAndElementDrag(tile, el, 'click1');
+        });
+
+        rightClickOrDrag(el, () => {
+            updateTileStateAndElementDrag(tile, el, 'click2')
+        });
+
+        onTouchLongPress(el, 700, () => {
+            setInitialDraggedState('unclicked');
+            updateTileStateAndElementDrag(tile, el, 'click2');
+        });
     }
 
     drawHeaderTileElements(gameData, gameboardElement, fragment);

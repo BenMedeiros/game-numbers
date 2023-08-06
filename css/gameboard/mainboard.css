@@ -13,7 +13,7 @@
 body {
     background-size: 50%;
     background-color: darkgrey;
-    background-image: url(/img/pokemon/backgrounds/background_line_art_1.jpg), url(/game-numbers/img/pokemon/backgrounds/background_line_art_1.jpg);
+    background-image:  url(/game-numbers/img/pokemon/backgrounds/background_line_art_1.jpg);
     background-blend-mode: multiply;
 }
 
@@ -21,7 +21,7 @@ i {
     vertical-align: bottom;
 }
 
-.gameboard * {
+.gameboard, .gameboard * {
     user-select: none;
     -webkit-user-select: none;
 }
@@ -33,7 +33,7 @@ i {
     --tile-size: 2rem;
     --max-chain-length-x: 1;
     --max-chain-length-y: 1;
-    --gameboard-offset-x: calc(var(--tile-size) * var(--max-chain-length-x) / 2);
+    --gameboard-offset-x: calc(1rem + var(--tile-size) * var(--max-chain-length-x) / 2);
     --gameboard-offset-y: calc(var(--tile-size) * var(--max-chain-length-y) / 2);
 
     background-color: var(--color-outline);
@@ -57,6 +57,11 @@ i {
     overflow: auto;
     max-width: 80%;
     max-height: 75%;
+}
+
+.gameboard .timer {
+    margin-left: 1rem;
+    margin-top: 1rem;
 }
 
 .tile {

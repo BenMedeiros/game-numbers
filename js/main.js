@@ -13,6 +13,8 @@ import {saveCompletedGame} from "./game/gameHistory.js";
 import gameConfig from "./game/gameConfig.js";
 import gameData from "./game/gameData.js";
 import {createTimerElement} from "./ui/timerElement.js";
+import {createControlsScreen} from "./ui/controlsScreen.js";
+import {startLogHistory} from "./game/moveHistory.js";
 
 function updateBoard() {
     clearTiles(gameData.tiles);
@@ -20,6 +22,7 @@ function updateBoard() {
 
     newGameBoardElement(gameConfig, gameData);
     createTimerElement(gameData);
+    createControlsScreen();
 
     createTiles(gameData.tiles, gameConfig, gameData);
     createHeaderTiles(gameData.headerTiles, gameConfig);
@@ -55,6 +58,8 @@ document.addEventListener('new-game', () => {
     gameData.intervalId = setInterval(() => {
         gameData.timeElapsed = (new Date() - gameData.startTime) / 1000;
     }, 51);
+
+    startLogHistory();
 
     document.removeEventListener('game-won', saveAndLogTime, {once: true});
 

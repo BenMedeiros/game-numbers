@@ -1,7 +1,6 @@
 'use strict';
 
 import {randomFrom} from "../common/utils.js";
-import TILE_STATES from "./tile_states.js";
 
 export {
     createTiles,
@@ -37,11 +36,11 @@ function createTiles(tiles, gameConfig, gameData) {
                     get() {
                         //    state is stored like isFilled, showing current user clicks
                         if (isTileInState(this.id, gameData.stateClick1)) {
-                            return TILE_STATES.CLICK1;
+                            return 'click1';
                         } else if (isTileInState(this.id, gameData.stateClick2)) {
-                            return TILE_STATES.CLICK2;
+                            return 'click2';
                         } else {
-                            return TILE_STATES.UNCLICKED;
+                            return 'unclicked';
                         }
                     },
                     set(newState) {
@@ -56,7 +55,7 @@ function createTiles(tiles, gameConfig, gameData) {
     }
 }
 
-function isTileInState(tileId, stateArray){
+function isTileInState(tileId, stateArray) {
     //find the partition this tile lives in
     const partitionIndex = Math.floor(tileId / 30);
     const tileBitIndex = 1 << (tileId % 30);
@@ -67,14 +66,14 @@ function isTileInState(tileId, stateArray){
     return (pState & tileBitIndex) > 0
 }
 
-function setTileStateToTrue(tileId, stateArray){
+function setTileStateToTrue(tileId, stateArray) {
     const partitionIndex = Math.floor(tileId / 30);
     const tileBitIndex = 1 << (tileId % 30);
     // [int in the array][bit in the int]
     stateArray[partitionIndex] |= tileBitIndex;
 }
 
-function setTileStateToFalse(tileId, stateArray){
+function setTileStateToFalse(tileId, stateArray) {
     const partitionIndex = Math.floor(tileId / 30);
     const tileBitIndex = 1 << (tileId % 30);
     // [int in the array][bit in the int]
@@ -85,15 +84,15 @@ function setTileStateToFalse(tileId, stateArray){
 function updateGameDataClickState(gameData, tile, newState) {
     if (tile.state === newState) {
         //    nothing needed
-    } else if (newState === TILE_STATES.UNCLICKED) {
+    } else if (newState === 'unclicked') {
         setTileStateToFalse(tile.id, gameData.stateClick1);
         setTileStateToFalse(tile.id, gameData.stateClick2);
 
-    } else if (newState === TILE_STATES.CLICK1) {
+    } else if (newState === 'click1') {
         setTileStateToTrue(tile.id, gameData.stateClick1);
         setTileStateToFalse(tile.id, gameData.stateClick2);
 
-    } else if (newState === TILE_STATES.CLICK2) {
+    } else if (newState === 'click2') {
         setTileStateToTrue(tile.id, gameData.stateClick2);
         setTileStateToFalse(tile.id, gameData.stateClick1);
     }

@@ -1,12 +1,15 @@
 'use strict';
 
-import TILE_STATES from "../game/tile_states.js";
 import {roundToPrecisionString} from "../common/utils.js";
+import {leftClickOrDrag, rightClickOrDrag} from "../html/interactionHelpers.js";
+import {
+    setInitialDraggedState,
+    updateTileStateAndElement
+} from "../game/gameStateManager.js";
 
 export {
     drawTileElements,
     newGameBoardElement,
-    updateTileElementState
 }
 
 function newGameBoardElement(gameConfig, gameData) {
@@ -26,9 +29,11 @@ function newGameBoardElement(gameConfig, gameData) {
     timerEl.classList.add('timer');
     timerEl.innerText = '0';
     el.appendChild(timerEl);
+
     const intervalId = setInterval(() => {
         timerEl.innerText = roundToPrecisionString(gameData.timeElapsed, 2) + ' s';
     }, 100);
+
     document.addEventListener('new-game', () => {
         setTimeout(() => clearInterval(intervalId), 100);
     }, {once: true});
@@ -45,23 +50,6 @@ function clearGameBoardElements(gameboardElement) {
     }
 }
 
-function updateTileElementState(tile, el) {
-    if (tile.state === TILE_STATES.UNCLICKED) {
-        el.classList.remove('click1');
-        el.classList.remove('click2');
-    } else if (tile.state === TILE_STATES.CLICK1) {
-        el.classList.add('click1');
-        el.classList.remove('click2');
-    } else if (tile.state === TILE_STATES.CLICK2) {
-        el.classList.add('click2');
-        el.classList.remove('click1');
-    } else {
-        throw new Error('Impossible');
-    }
-
-
-}
-
 function drawTileElements(gameboardElement, gameData) {
     const fragment = document.createDocumentFragment();
 
@@ -74,24 +62,33 @@ function drawTileElements(gameboardElement, gameData) {
 
         el.style.setProperty('--tile-x', tile.x);
         el.style.setProperty('--tile-y', tile.y);
-        updateTileElementState(tile, el);
 
         fragment.appendChild(el);
-        el.onclick = (e) => {
-            gameData.gameboardElement.dispatchEvent(new CustomEvent('tile-clicked-1', {detail: {tile}}));
-        };
 
-        el.addEventListener("contextmenu", e => {
-            e.preventDefault();
-            gameData.gameboardElement.dispatchEvent(new CustomEvent('tile-clicked-2', {detail: {tile}}));
+        el.addEventListener('mousedown', () => setInitialDraggedState(tile.state));
+
+        leftClickOrDrag(el, () => {
+            updateTileStateAndElement(tile, el, 'click1');
         });
+
+        rightClickOrDrag(el, () => {
+            updateTileStateAndElement(tile, el, 'click2')
+        });
+
+        //disable generic right click menu
+        el.oncontextmenu = e => e.preventDefault();
+
+        el.ontouchmove = (e) => {
+            console.log('touch move' + tile.id);
+        }
+
+        el.ontouchstart = (e) => {
+            console.log('touch start' + tile.id);
+        }
     }
 
-
     drawHeaderTileElements(gameData, gameboardElement, fragment);
-
     gameboardElement.appendChild(fragment);
-
 }
 
 function drawHeaderTileElements(gameData, gameboardElement, fragment) {

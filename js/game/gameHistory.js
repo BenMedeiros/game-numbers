@@ -14,8 +14,6 @@ function saveCompletedGame(gameConfig, gameData) {
     });
 
     localStorage.setItem('history', JSON.stringify(history));
-
-    console.log(history);
 }
 
 function getBestTimeForSize(gameConfig){

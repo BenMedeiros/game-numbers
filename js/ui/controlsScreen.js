@@ -1,7 +1,19 @@
 'use strict';
 
-import {createBranch, getCurrentGameHistoryIndex, restoreBranch, undoLastMove} from "../game/moveHistory.js";
+import {
+    createBranch,
+    restoreBranch, saveMoveHistory,
+    undoLastMove
+} from "../game/moveHistory.js";
 import gameData from "../game/gameData.js";
+import {
+    branchAllowed,
+    branchCreated,
+    branchDeleted,
+    branchNotAllowed, moveHistoryEmpty,
+    moveMade,
+    onFunctionEvent, removeFunctionEvents
+} from "../common/eventHandler.js";
 
 const mainTags = document.getElementsByTagName("main");
 if (mainTags.length !== 1) throw new Error('should only be 1 main tag in body');
@@ -24,6 +36,9 @@ export function createControlsScreen() {
     el.appendChild(createUndoBtnElement());
     el.appendChild(createBranchBtnElement());
     controlsScreenElement = el;
+
+    onFunctionEvent(branchCreated, el.id, createBranchInstanceElement);
+
     mainTag.appendChild(el);
 }
 
@@ -38,12 +53,9 @@ export function createUndoBtnElement() {
     el.innerText = 'undo';
     btn.appendChild(el);
 
-    gameData.gameboardElement.addEventListener('move-history-empty', () => {
-        btn.disabled = true;
-    });
-    gameData.gameboardElement.addEventListener('move-history-not-empty', () => {
-        btn.disabled = false;
-    });
+    btn.disabled = true;
+    onFunctionEvent(moveMade, btn.id, () => btn.disabled = false);
+    onFunctionEvent(moveHistoryEmpty, btn.id, () => btn.disabled = true);
 
     return btn;
 }
@@ -53,14 +65,15 @@ export function createBranchBtnElement() {
     btn.id = 'branch-btn';
     btn.classList.add('branch');
     btn.innerText = 'Branch';
-    btn.onclick = () => createBranchInstanceElement(createBranch());
+    btn.disabled = true;
+    btn.onclick = createBranch;
 
-    gameData.gameboardElement.addEventListener('branch-history-empty', () => {
-        btn.disabled = true;
-    });
-    gameData.gameboardElement.addEventListener('branch-history-not-empty', () => {
-        btn.disabled = false;
-    });
+    onFunctionEvent(branchCreated, btn.id, () => btn.disabled = true);
+    onFunctionEvent(branchNotAllowed, btn.id, () => btn.disabled = true);
+    onFunctionEvent(moveHistoryEmpty, btn.id, () => btn.disabled = true);
+    onFunctionEvent(branchAllowed, btn.id, () => btn.disabled = false);
+    onFunctionEvent(moveMade, btn.id, () => btn.disabled = false);
+    onFunctionEvent(branchDeleted, btn.id, () => btn.disabled = false);
 
     return btn;
 }
@@ -72,16 +85,14 @@ export function createBranchInstanceElement(branchIndex) {
     btn.id = 'branch-instance-' + branchIndex;
     btn.classList.add('branch-instance');
     btn.innerText = 'Restore ' + branchIndex;
-    btn.onclick = () => {
-        console.log('onclick', getCurrentGameHistoryIndex(), branchIndex);
-        for (let i = getCurrentGameHistoryIndex(); i >= branchIndex; i--) {
-            const elToDelete = document.getElementById('branch-instance-'+i);
-            elToDelete.remove();
+    btn.onclick = () => restoreBranch(branchIndex);
+
+    onFunctionEvent(branchDeleted, btn.id, (deletedBranchIndex) => {
+        if (branchIndex === deletedBranchIndex) {
+            removeFunctionEvents(btn.id);
+            btn.remove();
         }
-
-        restoreBranch(branchIndex);
-        // btn.remove();
-    };
-
+    });
     controlsScreenElement.appendChild(btn);
 }
+

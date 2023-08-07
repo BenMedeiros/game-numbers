@@ -75,9 +75,12 @@ export function calculateChainStateAfterTileChange(thisTile) {
                 const tilesInColumn = gameData.tiles.filter(t => t.x === headerTile.x).sort((a, b) => {
                     return a > b ? 1 : 0;
                 });
-
                 resolveBooleanMatches(headerTile.chainSequence, calculateChainSequence(tilesInColumn));
-
+            }else{
+                const tilesInRow = gameData.tiles.filter(t => t.y === headerTile.y).sort((a, b) => {
+                    return a > b ? 1 : 0;
+                });
+                resolveBooleanMatches(headerTile.chainSequence, calculateChainSequence(tilesInRow));
             }
         }
     }

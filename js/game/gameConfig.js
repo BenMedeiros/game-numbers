@@ -43,8 +43,6 @@ Object.defineProperties(gameConfig, {
 
             //only need this many tiles/bits in the last partition
             this.gameIdPartitioned[this.gameIdPartitioned.length - 1] %= (1 << maxLengthInLastPartition);
-
-            console.log(lengthRequired, this.gameIdPartitioned, maxLengthInLastPartition, 1 << maxLengthInLastPartition);
         }
     }
 });

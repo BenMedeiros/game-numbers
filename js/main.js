@@ -14,35 +14,9 @@ import gameConfig from "./game/gameConfig.js";
 import gameData from "./game/gameData.js";
 import {createTimerElement} from "./ui/timerElement.js";
 import {createControlsScreen} from "./ui/controlsScreen.js";
-import {startLogHistory} from "./game/moveHistory.js";
+import {startLogMoveHistory} from "./game/moveHistory.js";
 
 function updateBoard() {
-    clearTiles(gameData.tiles);
-    clearTiles(gameData.headerTiles);
-
-    newGameBoardElement(gameConfig, gameData);
-    createTimerElement(gameData);
-    createControlsScreen();
-
-    createTiles(gameData.tiles, gameConfig, gameData);
-    createHeaderTiles(gameData.headerTiles, gameConfig);
-    calculateHeaderTileText(gameConfig, gameData.tiles, gameData.headerTiles);
-
-    drawTileElements(gameData.gameboardElement, gameData);
-
-    document.addEventListener('game-won', saveAndLogTime, {once: true});
-}
-
-function saveAndLogTime() {
-    gameData.timeElapsed = (new Date() - gameData.startTime) / 1000;
-    console.log(gameConfig.gameId, gameData.startTime, gameData.timeElapsed);
-
-    saveCompletedGame(gameConfig, gameData);
-
-    clearInterval(gameData.intervalId);
-}
-
-document.addEventListener('new-game', () => {
     console.log('new-game');
 
     updateConfigFromUiElement(gameConfig, ['numCols', 'numRows', 'tileSize']);
@@ -59,19 +33,38 @@ document.addEventListener('new-game', () => {
         gameData.timeElapsed = (new Date() - gameData.startTime) / 1000;
     }, 51);
 
-    startLogHistory();
-
     document.removeEventListener('game-won', saveAndLogTime, {once: true});
 
+    clearTiles(gameData.tiles);
+    clearTiles(gameData.headerTiles);
 
-    updateBoard();
-});
+    newGameBoardElement(gameConfig, gameData);
+    createTimerElement(gameData);
+    createControlsScreen();
 
+    createTiles(gameData.tiles, gameConfig, gameData);
+    createHeaderTiles(gameData.headerTiles, gameConfig);
+    calculateHeaderTileText(gameConfig, gameData.tiles, gameData.headerTiles);
+
+    drawTileElements(gameData.gameboardElement, gameData);
+
+    document.addEventListener('game-won', saveAndLogTime, {once: true});
+
+    startLogMoveHistory();
+
+}
+
+function saveAndLogTime() {
+    gameData.timeElapsed = (new Date() - gameData.startTime) / 1000;
+    console.log(gameConfig.gameId, gameData.startTime, gameData.timeElapsed);
+
+    saveCompletedGame(gameConfig, gameData);
+
+    clearInterval(gameData.intervalId);
+}
 
 populateSettingsElementFromConfig(gameConfig, ['numCols', 'numRows', 'tileSize']);
-
-// start
-setTimeout(updateBoard, 500);
+document.addEventListener('new-game', updateBoard);
 
 export default {
     getGameData: () => gameData

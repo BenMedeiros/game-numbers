@@ -5,42 +5,79 @@ import gameData from "./gameData.js";
 
 const moveHistoryMap = {};
 
-export function startLogHistory(){
+function getCurrentGameHistory() {
+    return moveHistoryMap[gameData.startTime];
+}
+
+export function getCurrentGameHistoryIndex() {
+    return moveHistoryMap[gameData.startTime].length - 1;
+}
+
+function getCurrentBranch() {
+    return getCurrentGameHistory()[getCurrentGameHistoryIndex()];
+}
+
+export function startLogMoveHistory() {
+    // [startTime[branch]]
     moveHistoryMap[gameData.startTime] = [];
+    getCurrentGameHistory().push([]);
+    triggerEvent();
 }
 
 //save the move by storing the current click1/click2 states
-export function saveMoveHistory(tile, newState, gameData) {
-    moveHistoryMap[gameData.startTime].push([tile.id, tile.state, newState]);
+export function saveMoveHistory(tile, newState) {
+    getCurrentBranch().push([tile.id, tile.state, newState]);
     triggerEvent(gameData);
 }
 
-export function undoLastMove(gameData) {
-    if (moveHistoryMap[gameData.startTime].length === 0) return;
+// returns true when a move undone, else false
+export function undoLastMove() {
+    if (getCurrentBranch().length === 0) return false;
 
-    const lastMove = moveHistoryMap[gameData.startTime][moveHistoryMap[gameData.startTime].length - 1];
-    console.log('UNDO MOVE', lastMove);
+    const lastMove = getCurrentBranch()[getCurrentBranch().length - 1];
     updateTileState(gameData.tiles[lastMove[0]], lastMove[1]);
     // setting the state creates a record for the undo, so remove 2
-    moveHistoryMap[gameData.startTime].pop();
-    moveHistoryMap[gameData.startTime].pop();
+    getCurrentBranch().pop();
+    getCurrentBranch().pop();
 
     triggerEvent(gameData);
+    return true;
 }
 
-function triggerEvent(gameData) {
-    if (moveHistoryMap[gameData.startTime].length === 0) {
+function triggerEvent() {
+    if (getCurrentGameHistoryIndex() === 0 && getCurrentBranch().length === 0) {
         gameData.gameboardElement.dispatchEvent(new Event('move-history-empty'));
     } else {
-        gameData.gameboardElement.dispatchEvent(new Event('move-history-notempty'));
+        gameData.gameboardElement.dispatchEvent(new Event('move-history-not-empty'));
+    }
+
+    if (getCurrentBranch().length === 0) {
+        gameData.gameboardElement.dispatchEvent(new Event('branch-history-empty'));
+    } else {
+        gameData.gameboardElement.dispatchEvent(new Event('branch-history-not-empty'));
     }
 }
 
-//stores the index of move history to go back to
-const branches = [];
-
 export function createBranch() {
-    console.log('branch craeted');
-    const branchIndex = branches.push(moveHistoryMap[gameData.startTime].length - 1) - 1;
+    if (getCurrentBranch().length === 0) {
+        //    branch doesn't have any moves so its unneeded
+        return;
+    }
+
+    const branchIndex = getCurrentGameHistory().push([]) - 1;
+    triggerEvent();
     return branchIndex;
+}
+
+//branches stores when a user saves a checkpoint in move history
+export function restoreBranch(branchIndex) {
+    let safety = 0;
+    while (getCurrentGameHistoryIndex() >= branchIndex) {
+        while (undoLastMove()) {
+            // intentionally blank
+        }
+
+        getCurrentGameHistory().pop();
+        if (safety++ > 4) break;
+    }
 }

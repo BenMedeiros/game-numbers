@@ -45,7 +45,6 @@ function createTiles(tiles, gameConfig, gameData) {
                     },
                     set(newState) {
                         updateGameDataClickState(gameData, this, newState);
-                        console.log(gameConfig.gameIdPartitioned, gameData.stateClick1, gameData.stateClick2);
                     }
                 }
             });

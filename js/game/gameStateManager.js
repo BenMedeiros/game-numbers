@@ -63,7 +63,6 @@ export function updateTileStateAndElementToUnclicked(tile, el) {
 
 export function updateTileState(tile, state) {
     const el = document.getElementById(tile.elId);
-    console.log('update', tile, state );
 
     if (state === 'unclicked') {
         updateTileStateAndElementToUnclicked(tile, el);

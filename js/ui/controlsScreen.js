@@ -1,6 +1,6 @@
 'use strict';
 
-import {createBranch, undoLastMove} from "../game/moveHistory.js";
+import {createBranch, getCurrentGameHistoryIndex, restoreBranch, undoLastMove} from "../game/moveHistory.js";
 import gameData from "../game/gameData.js";
 
 const mainTags = document.getElementsByTagName("main");
@@ -9,10 +9,10 @@ const mainTag = mainTags[0];
 
 let controlsScreenElement = null;
 document.addEventListener('new-game', () => {
-    if(controlsScreenElement) controlsScreenElement.remove();
+    if (controlsScreenElement) controlsScreenElement.remove();
 })
 
-export function createControlsScreen(){
+export function createControlsScreen() {
     const el = document.createElement("div");
     el.id = 'controls-screen';
     el.classList.add('controls');
@@ -31,7 +31,6 @@ export function createUndoBtnElement() {
     const btn = document.createElement("button");
     btn.id = 'undo-btn';
     btn.classList.add('undo');
-    btn.disabled = true;
     btn.onclick = () => undoLastMove(gameData);
 
     const el = document.createElement("i");
@@ -42,7 +41,7 @@ export function createUndoBtnElement() {
     gameData.gameboardElement.addEventListener('move-history-empty', () => {
         btn.disabled = true;
     });
-    gameData.gameboardElement.addEventListener('move-history-notempty', () => {
+    gameData.gameboardElement.addEventListener('move-history-not-empty', () => {
         btn.disabled = false;
     });
 
@@ -54,17 +53,35 @@ export function createBranchBtnElement() {
     btn.id = 'branch-btn';
     btn.classList.add('branch');
     btn.innerText = 'Branch';
-    btn.onclick = () => createBranchInstanceElement(createBranch(gameData));
+    btn.onclick = () => createBranchInstanceElement(createBranch());
+
+    gameData.gameboardElement.addEventListener('branch-history-empty', () => {
+        btn.disabled = true;
+    });
+    gameData.gameboardElement.addEventListener('branch-history-not-empty', () => {
+        btn.disabled = false;
+    });
+
     return btn;
 }
 
 export function createBranchInstanceElement(branchIndex) {
-    if(!controlsScreenElement) return;
+    if (!controlsScreenElement) return;
 
     const btn = document.createElement("button");
     btn.id = 'branch-instance-' + branchIndex;
     btn.classList.add('branch-instance');
-    btn.innerText = 'Branch ' + branchIndex;
+    btn.innerText = 'Restore ' + branchIndex;
+    btn.onclick = () => {
+        console.log('onclick', getCurrentGameHistoryIndex(), branchIndex);
+        for (let i = getCurrentGameHistoryIndex(); i >= branchIndex; i--) {
+            const elToDelete = document.getElementById('branch-instance-'+i);
+            elToDelete.remove();
+        }
+
+        restoreBranch(branchIndex);
+        // btn.remove();
+    };
 
     controlsScreenElement.appendChild(btn);
 }

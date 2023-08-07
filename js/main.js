@@ -1,6 +1,6 @@
 'use strict';
 
-import {createHeaderTiles, calculateHeaderTileText} from "./game/headerTiles.js";
+import {createHeaderTiles, calculateHeaderTileChains} from "./game/headerTiles.js";
 import {createTiles, clearTiles} from "./game/tiles.js";
 import {drawTileElements, newGameBoardElement} from "./ui/gameboardElements.js";
 import {
@@ -43,8 +43,8 @@ function updateBoard() {
     createControlsScreen();
 
     createTiles(gameData.tiles, gameConfig, gameData);
-    createHeaderTiles(gameData.headerTiles, gameConfig);
-    calculateHeaderTileText(gameConfig, gameData.tiles, gameData.headerTiles);
+    createHeaderTiles();
+    calculateHeaderTileChains();
 
     drawTileElements(gameData.gameboardElement, gameData);
 

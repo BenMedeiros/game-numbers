@@ -1,6 +1,7 @@
 'use strict';
 
 import {saveMoveHistory} from "./moveHistory.js";
+import {calculateChainStateAfterTileChange} from "./headerTiles.js";
 
 export {
     createTiles,
@@ -100,4 +101,6 @@ function updateGameDataClickState(gameData, tile, newState) {
         setTileStateToTrue(tile.id, gameData.stateClick2);
         setTileStateToFalse(tile.id, gameData.stateClick1);
     }
+
+    calculateChainStateAfterTileChange(tile);
 }

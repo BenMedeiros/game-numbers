@@ -6,6 +6,17 @@ import gameConfig from "./gameConfig.js";
 export function evalGameComplete() {
     let userWin = true;
 
+    for (const headerTile of gameData.headerTiles) {
+        for (const chain of headerTile.chainSequence) {
+            const el = document.getElementById(chain.elId);
+            if (chain.found) {
+                el.classList.add('chain-found');
+            } else {
+                el.classList.remove('chain-found');
+            }
+        }
+    }
+
     for (let i = 0; i < gameConfig.gameIdPartitioned.length; i++) {
         if (gameConfig.gameIdPartitioned[i] !== gameData.stateClick1[i]) userWin = false;
     }

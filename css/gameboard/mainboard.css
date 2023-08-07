@@ -125,3 +125,6 @@ i {
     left: calc(var(--tile-size) * (var(--tile-x) + .35) + var(--gameboard-offset-x));
 }
 
+.chain-found {
+    opacity: .3;
+}

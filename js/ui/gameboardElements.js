@@ -79,24 +79,25 @@ function drawHeaderTileElements(gameData, gameboardElement, fragment) {
     let maxChainX = 0;
     for (const headerTile of gameData.headerTiles) {
         if (headerTile.type === 'left') {
-            if (headerTile.chain.length > maxChainX) maxChainX = headerTile.chain.length;
+            if (headerTile.chainSequence.length > maxChainX) maxChainX = headerTile.chainSequence.length;
         } else {
-            if (headerTile.chain.length > maxChainY) maxChainY = headerTile.chain.length;
+            if (headerTile.chainSequence.length > maxChainY) maxChainY = headerTile.chainSequence.length;
         }
 
-        for (let i = 0; i < headerTile.chain.length; i++) {
+        for (let i = 0; i < headerTile.chainSequence.length; i++) {
             const el = document.createElement("div");
-            el.innerText = headerTile.chain[i];
+            el.id = headerTile.chainSequence[i].elId;
+            el.innerText = headerTile.chainSequence[i].chain;
 
             if (headerTile.type === 'left') {
                 el.classList.add('left-header-tile');
-                el.style.setProperty('--tile-x', String((i - headerTile.chain.length) / 2));
+                el.style.setProperty('--tile-x', String((i - headerTile.chainSequence.length) / 2));
                 el.style.setProperty('--tile-y', headerTile.y);
             } else {
                 el.classList.add('top-header-tile');
                 el.style.setProperty('--tile-x', headerTile.x);
-                el.style.setProperty('--tile-y', String((i - headerTile.chain.length) / 2));
-                if (headerTile.chain.length > maxChainY) maxChainY = headerTile.chain.length;
+                el.style.setProperty('--tile-y', String((i - headerTile.chainSequence.length) / 2));
+                if (headerTile.chainSequence.length > maxChainY) maxChainY = headerTile.chainSequence.length;
             }
 
             fragment.appendChild(el);

@@ -17,6 +17,14 @@
     border-radius: .5rem;
 }
 
+@media (max-aspect-ratio: 5/8) {
+    #controls-screen {
+        margin: 0;
+        display: flex;
+        flex-wrap: wrap;
+    }
+}
+
 #controls-screen > h3 {
     margin: .5rem;
 }

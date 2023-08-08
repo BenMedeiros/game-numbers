@@ -9,6 +9,13 @@ form, form * {
   -webkit-user-select: none;
 }
 
+/*phones, so that the controls will go on top*/
+@media (min-aspect-ratio: 2 / 1) {
+  form {
+    float: left;
+  }
+}
+
 form {
   background-color: var(--color-menu-backdrop);
   color: var(--color-menu-border);
@@ -30,9 +37,18 @@ form {
   transition: width .1s;
 }
 
-@media screen and (max-width: 480px) {
-  form label, input, select {
-    /*font-size: 7vw;*/
+@media (max-aspect-ratio: 5/8) {
+  form {
+    margin:0;
+  }
+  form:not(.collapsed) {
+    height: auto;
+    width: auto;
+    max-width: 100%;
+  }
+
+  form.collapsed label, form.collapsed input {
+    visibility: hidden;
   }
 }
 
@@ -87,28 +103,4 @@ form input[type=submit]:hover {
   width: 8rem;
   transition: width 1s 1.2s;
 }
-
-
-@media screen and (max-width: 600px) {
-  .expanded {
-    resize: none;
-    height: auto;
-    width: 90%;
-    max-width: 100%;
-    left: 0;
-    right: 0;
-    margin: auto;
-  }
-}
-
-/*used by the js to turn on transitions when collapsing, then removed from element*/
-/*have to transition max-height as well because resize modifies el instance*/
-.collapsing {
-  /*transition: height .4s, width .8s ease-in;*/
-}
-
-.expanding {
-  /*transition: height .8s ease-in, width .2s;*/
-}
-
 

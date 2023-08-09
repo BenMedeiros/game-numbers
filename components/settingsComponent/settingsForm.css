@@ -1,22 +1,16 @@
-:root {
-  --color-menu-backdrop : #2f3032;
-  --color-menu-border : lightgrey;
-  --color-menu-subtext: #888888;
-}
-
-form, form * {
+#gameConfig, #gameConfig * {
   user-select: none;
   -webkit-user-select: none;
 }
 
 /*phones, so that the controls will go on top*/
 @media (min-aspect-ratio: 2 / 1) {
-  form {
+  #gameConfig {
     float: left;
   }
 }
 
-form {
+#gameConfig {
   background-color: var(--color-menu-backdrop);
   color: var(--color-menu-border);
   font-family: Arial;
@@ -35,67 +29,73 @@ form {
   overflow: hidden;
   /*can't transition height when its auto*/
   transition: width .1s;
+  text-align: center;
 }
 
 @media (max-aspect-ratio: 5/8) {
-  form {
+  #gameConfig {
     margin:0;
   }
-  form:not(.collapsed) {
+  #gameConfig:not(.collapsed) {
     height: auto;
     width: auto;
     max-width: 100%;
   }
 
-  form.collapsed label, form.collapsed input {
+  #gameConfig.collapsed label, #gameConfig.collapsed input {
     visibility: hidden;
   }
 }
 
-form label {
+#gameConfig  > h3 {
+  text-align: left;
+}
+
+#gameConfig label {
   text-align: right;
   display: inline-block;
   width: 40%;
+  min-width: 5rem;
   padding-right: 4%;
 }
 
-form input, select {
+#gameConfig input, select {
   width: 50%;
   margin: .2rem 0;
   display: inline-block;
-  border: 1px solid #ccc;
+  border: 1px solid var(--color-menu-border);
+  background-color: var(--color-menu-border);
   border-radius: .5rem;
   box-sizing: border-box;
 }
 
-form input:read-only {
+#gameConfig input:read-only {
   border: 0;
   box-shadow: none;
   background-color: var(--color-menu-subtext);
 }
 
-form input:hover, select:hover {
+#gameConfig input::placeholder {
+  color: var(--color-menu-backdrop);
+}
+
+#gameConfig input:hover, select:hover {
   border: 1px solid black;
 }
 
-form input[type=submit] {
-  width: 100%;
-  background-color: #4CAF50;
-  color: var(--color-white);
+#gameConfig button {
+  background-color: var(--color-backdrop);
+  color: var(--color-text);
   padding: 1.1rem 1.3rem;
   border: 1px solid #ccc;
   border-radius: 4px;
   cursor: pointer;
+  margin: 1rem;
 }
 
-form input[type=submit]:hover {
+#gameConfig button:hover {
   background-color: #45a049;
   border: 1px solid black;
-}
-
-
-.collapsible {
-  /*overflow: hidden;*/
 }
 
 .collapsed {

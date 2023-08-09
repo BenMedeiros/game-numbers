@@ -2,29 +2,31 @@
 <html class="no-js" lang="">
 
 <head>
-  <meta charset="utf-8">
-  <title>Game - Numbers</title>
-  <meta name="description" content="">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <title>Game - Numbers</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <meta property="og:title" content="">
-  <meta property="og:type" content="">
-  <meta property="og:url" content="">
-  <meta property="og:image" content="">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
 
-  <!--  <link rel="manifest" href="site.webmanifest">-->
-  <link rel="apple-touch-icon" href="icon.png">
-  <!-- Place favicon.ico in the root directory -->
+    <!--  <link rel="manifest" href="site.webmanifest">-->
+    <link rel="apple-touch-icon" href="icon.png">
+    <!-- Place favicon.ico in the root directory -->
 
-  <link rel="stylesheet" href="css/normalize.css">
-  <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/main.css">
 
-  <meta name="theme-color" content="#fafafa">
+    <meta name="theme-color" content="#fafafa">
 
-  <link rel="stylesheet" href="css/gameboard/mainboard.css">
-  <link rel="stylesheet" href="css/gameboard/winScreen.css">
-  <link rel="stylesheet" href="css/gameboard/controlsScreen.css">
-  <link rel="stylesheet" href="components/settingsComponent/settingsForm.css">
+    <link rel="stylesheet" href="css/gameboard/theme.css">
+    <link rel="stylesheet" href="css/gameboard/mainboard.css">
+    <link rel="stylesheet" href="css/gameboard/winScreen.css">
+    <link rel="stylesheet" href="css/gameboard/controlsScreen.css">
+    <link rel="stylesheet" href="css/gameboard/navigationBar.css">
+    <link rel="stylesheet" href="components/settingsComponent/settingsForm.css">
 
 </head>
 
@@ -38,45 +40,33 @@
 
 
 <header>
-
+    <div id="navigation-bar">
+        <button>
+            <a href="/img/pokemon/gifs/pikachu_dancing.gif">Test link</a>
+        </button>
+        <button>
+            <a href="/img/pokemon/gifs/pikachu_dancing.gif">Test link</a>
+        </button>
+        <button >
+            <a href="/img/pokemon/gifs/pikachu_dancing.gif">Test link</a>
+        </button>
+    </div>
 </header>
-<main>
+<main id="main">
 
-  <form id="gameConfig" class="collapsible" onsubmit="return false">
-    <h3>
-      <span><i class="material-icons">settings</i> Settings</span>
-    </h3>
-  
-    <label for="numRows">Rows</label>
-    <input type="number" id="numRows" name="numRows">
-    <br/>
-    <label for="numCols">Cols</label>
-    <input type="number" id="numCols" name="numCols">
-    <br/>
-    <label for="tileSize">Tile Size</label>
-    <input type="number" id="tileSize" name="tileSize">
-    <br/>
-    <label for="gameId">Game Id</label>
-    <input type="string" id="gameId" name="gameId" readonly>
-    <br/>
+    <img src="img/pokemon/gifs/pikachu_dancing.gif" style="position:absolute;left:0;bottom:0;height:5rem">
+    <progress value="0" max="1" style="position:absolute;right:1rem;bottom:1rem"></progress>
 
-    <br/>
-    <input id="submit" type="submit" value="New Game">
-  </form>
-
-  <img src="img/pokemon/gifs/pikachu_dancing.gif" style="position:absolute;left:0;bottom:0;height:5rem">
-  <progress value="0" max="1" style="position:absolute;right:1rem;bottom:1rem"></progress>
-
-  <!-- Main gameboard to draw everything on to -->
-  <div id="gameboard" class="gameboard"></div>
+    <!-- Main gameboard to draw everything on to -->
+    <div id="gameboard" class="gameboard"></div>
 
 </main>
 <footer>
-  <script type="module">
-    import main from "./js/main.js";
-    console.log(main.getGameData());
-    document.getElementById('submit').addEventListener('click', () => document.dispatchEvent(new Event('new-game')));
-  </script>
+    <script type="module">
+        import main from "./js/main.js";
+
+        console.log(main.getGameData());
+    </script>
 
 </footer>
 <!--&lt;!&ndash; Google Analytics: change UA-XXXXX-Y to be your site's ID. &ndash;&gt;-->

@@ -1,34 +1,30 @@
 'use strict';
 
-import {appendLabelAndInput} from "../html/tinyComponents.js";
 import {getBestTimeForSize} from "../game/gameHistory.js";
+import gameData from "../game/gameData.js";
+import gameConfig from "../game/gameConfig.js";
+import {LabelInputType} from "../html/tinyComponents/LabelInputType.js";
+import {SubmitType} from "../html/tinyComponents/SubmitType.js";
 
-const mainTags = document.getElementsByTagName("main");
-if (mainTags.length !== 1) throw new Error('should only be 1 main tag in body');
-const mainTag = mainTags[0];
-
-function createWinScreen(event) {
+function createWinScreen(labelInputs) {
     if (winScreenOpen) return;
 
     const el = document.createElement("div");
     el.id = 'win-screen';
     el.classList.add('win-screen');
-    el.innerText = 'YOU WIN';
 
-    appendLabelAndInput(el, 'rows', 'Rows', event.detail.gameConfig.numRows);
-    appendLabelAndInput(el, 'cols', 'Cols', event.detail.gameConfig.numCols);
-    appendLabelAndInput(el, 'gameId', 'Game Id', event.detail.gameConfig.gameId);
-    appendLabelAndInput(el, 'timeElapsed', 'Time', event.detail.gameData.timeElapsed);
-    appendLabelAndInput(el, 'bestTime', 'Record', getBestTimeForSize(event.detail.gameConfig));
+    const div = document.createElement("div");
+    div.innerText = 'YOU WIN';
+    el.appendChild(div);
 
+    for (const labelInput of labelInputs) {
+        labelInput.createElementIn(el);
+    }
 
-    const btnNewGame = document.createElement("button");
-    btnNewGame.classList.add('new-game');
-    btnNewGame.innerText = 'New Game';
-    btnNewGame.onclick = () => document.dispatchEvent(new Event('new-game'));
-    el.appendChild(btnNewGame);
+    const submit = new SubmitType('submit', 'New Game', 'new-game');
+    submit.createElementIn(el);
 
-    mainTag.appendChild(el);
+    document.getElementById("main").appendChild(el);
     winScreenOpen = true;
 }
 
@@ -43,7 +39,15 @@ function closeWinScreen() {
 
 let winScreenOpen = false;
 
-document.addEventListener('game-won', createWinScreen);
+document.addEventListener('game-won', () => {
+    createWinScreen([
+        new LabelInputType('numRows', 'number', 'Rows', gameConfig.numRows, null, true),
+        new LabelInputType('numCols', 'number', 'Cols', gameConfig.numCols, null, true),
+        new LabelInputType('gameId', 'string', 'Game Id', gameConfig.gameId, null, true),
+        new LabelInputType('timeElapsed', 'number', 'Time', gameData.timeElapsed, null, true),
+        new LabelInputType('bestTime', 'number', 'Record', getBestTimeForSize(gameConfig), null, true)
+    ]);
+});
 document.addEventListener('new-game', closeWinScreen);
 
 export default {

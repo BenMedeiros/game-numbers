@@ -15,9 +15,7 @@ import {
     onFunctionEvent, removeFunctionEvents
 } from "../common/eventHandler.js";
 
-const mainTags = document.getElementsByTagName("main");
-if (mainTags.length !== 1) throw new Error('should only be 1 main tag in body');
-const mainTag = mainTags[0];
+const mainTag = document.getElementById("main");
 
 let controlsScreenElement = null;
 document.addEventListener('new-game', () => {

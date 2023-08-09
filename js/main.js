@@ -69,3 +69,6 @@ document.addEventListener('new-game', updateBoard);
 export default {
     getGameData: () => gameData
 }
+
+
+console.log(navigator.storage);

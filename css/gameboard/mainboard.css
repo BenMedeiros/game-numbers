@@ -22,13 +22,13 @@ i {
     --max-chain-length-x: 1;
     --max-chain-length-y: 1;
     --gameboard-offset-x: calc(1rem + var(--tile-size) * var(--max-chain-length-x) / 2);
-    --gameboard-offset-y: calc(var(--tile-size) * var(--max-chain-length-y) / 2);
+    --gameboard-offset-y: calc(1rem + var(--tile-size) * var(--max-chain-length-y) / 2);
 
     background-color: var(--color-outline);
     filter: drop-shadow(2px 4px 6px black);
 
-    border-color: var(--color-backdrop);
-    border-width: calc(var(--tile-size) * .4);
+    /*border-color: var(--color-backdrop);*/
+    /*border-width: calc(var(--tile-size) * .4);*/
     border-style: solid;
     /*centers when position:absolute*/
     position: absolute;

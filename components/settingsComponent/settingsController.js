@@ -1,6 +1,6 @@
 'use strict';
 
-import {SubmitType} from "../../js/html/tinyComponents/SubmitType.js";
+import {ButtonType} from "../../js/html/tinyComponents/ButtonType.js";
 import {LabelInputType} from "../../js/html/tinyComponents/LabelInputType.js";
 
 export function populateSettingsElementFromConfig(gameConfig, fieldNames) {
@@ -47,15 +47,17 @@ export function createSettingsComponent(labelInputs) {
         labelInput.createElementIn(settingsElementForm);
     }
 
-    const submit = new SubmitType('submit', 'New Game', 'new-game');
+    const submit = new ButtonType('submit', 'New Game', 'new-game');
     submit.createElementIn(settingsElementForm);
 
     document.addEventListener('click', (event) => {
+        console.log('clicked outside');
         if (!settingsElementForm.classList.contains('collapsed')) {
             settingsElementForm.classList.add('collapsed');
         }
     });
     settingsElementForm.addEventListener('click', (event) => {
+        console.log('clicked inside');
         event.stopPropagation();
         if (settingsElementForm.classList.contains('collapsed')) {
             settingsElementForm.classList.remove('collapsed');

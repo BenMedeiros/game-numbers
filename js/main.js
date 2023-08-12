@@ -66,9 +66,15 @@ function saveAndLogTime() {
 populateSettingsElementFromConfig(gameConfig, ['numCols', 'numRows', 'tileSize']);
 document.addEventListener('new-game', updateBoard);
 
+// automatically start next game
+document.addEventListener('game-won', () => {
+    setTimeout(() => {
+        document.dispatchEvent(new Event('new-game'));
+    }, 500);
+});
+
+
 export default {
     getGameData: () => gameData
 }
 
-
-console.log(navigator.storage);

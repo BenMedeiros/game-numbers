@@ -4,7 +4,7 @@ import {getBestTimeForSize} from "../game/gameHistory.js";
 import gameData from "../game/gameData.js";
 import gameConfig from "../game/gameConfig.js";
 import {LabelInputType} from "../html/tinyComponents/LabelInputType.js";
-import {SubmitType} from "../html/tinyComponents/SubmitType.js";
+import {ButtonType} from "../html/tinyComponents/ButtonType.js";
 
 function createWinScreen(labelInputs) {
     if (winScreenOpen) return;
@@ -21,7 +21,7 @@ function createWinScreen(labelInputs) {
         labelInput.createElementIn(el);
     }
 
-    const submit = new SubmitType('submit', 'New Game', 'new-game');
+    const submit = new ButtonType('submit', 'New Game', 'new-game');
     submit.createElementIn(el);
 
     document.getElementById("main").appendChild(el);

@@ -1,19 +1,16 @@
 'use strict';
 
-import {
-    createBranch,
-    restoreBranch, saveMoveHistory,
-    undoLastMove
-} from "../game/moveHistory.js";
-import gameData from "../game/gameData.js";
+import {createBranch, restoreBranch, undoLastMove} from "../game/moveHistory.js";
 import {
     branchAllowed,
     branchCreated,
     branchDeleted,
     branchNotAllowed, moveHistoryEmpty,
     moveMade,
-    onFunctionEvent, removeFunctionEvents
+    onFunctionEvent,
 } from "../common/eventHandler.js";
+import {ButtonType} from "../html/tinyComponents/ButtonType.js";
+import {fillNegativeSpaces, findPermutations, solvePartialSingleChain} from "../game/gameSolver.js";
 
 const mainTag = document.getElementById("main");
 
@@ -31,8 +28,22 @@ export function createControlsScreen() {
     textEl.innerText = 'Controls';
     el.appendChild(textEl);
 
-    el.appendChild(createUndoBtnElement());
-    el.appendChild(createBranchBtnElement());
+    new ButtonType('solve', 'Solve Partial Single Chain', solvePartialSingleChain).createElementIn(el);
+    new ButtonType('solve', 'Fill Negative Spaces', fillNegativeSpaces).createElementIn(el);
+    new ButtonType('solve', 'Find Permutations', findPermutations).createElementIn(el);
+
+
+
+    const undoBtn = new ButtonType('undo-btn', null, undoLastMove, true, 'undo');
+    undoBtn.createElementIn(el);
+    undoBtn.disableOnFunctionEvents([moveHistoryEmpty]);
+    undoBtn.enableOnFunctionEvents([moveMade]);
+
+    const branchBtn = new ButtonType('branch-btn', 'Branch', createBranch, true);
+    branchBtn.createElementIn(el);
+    branchBtn.disableOnFunctionEvents([branchCreated, branchNotAllowed, moveHistoryEmpty]);
+    branchBtn.enableOnFunctionEvents([branchAllowed, moveMade, branchDeleted]);
+
     controlsScreenElement = el;
 
     onFunctionEvent(branchCreated, el.id, createBranchInstanceElement);
@@ -40,57 +51,16 @@ export function createControlsScreen() {
     mainTag.appendChild(el);
 }
 
-export function createUndoBtnElement() {
-    const btn = document.createElement("button");
-    btn.id = 'undo-btn';
-    btn.classList.add('undo');
-    btn.onclick = () => undoLastMove(gameData);
-
-    const el = document.createElement("i");
-    el.classList.add('material-icons');
-    el.innerText = 'undo';
-    btn.appendChild(el);
-
-    btn.disabled = true;
-    onFunctionEvent(moveMade, btn.id, () => btn.disabled = false);
-    onFunctionEvent(moveHistoryEmpty, btn.id, () => btn.disabled = true);
-
-    return btn;
-}
-
-export function createBranchBtnElement() {
-    const btn = document.createElement("button");
-    btn.id = 'branch-btn';
-    btn.classList.add('branch');
-    btn.innerText = 'Branch';
-    btn.disabled = true;
-    btn.onclick = createBranch;
-
-    onFunctionEvent(branchCreated, btn.id, () => btn.disabled = true);
-    onFunctionEvent(branchNotAllowed, btn.id, () => btn.disabled = true);
-    onFunctionEvent(moveHistoryEmpty, btn.id, () => btn.disabled = true);
-    onFunctionEvent(branchAllowed, btn.id, () => btn.disabled = false);
-    onFunctionEvent(moveMade, btn.id, () => btn.disabled = false);
-    onFunctionEvent(branchDeleted, btn.id, () => btn.disabled = false);
-
-    return btn;
-}
-
 export function createBranchInstanceElement(branchIndex) {
     if (!controlsScreenElement) return;
 
-    const btn = document.createElement("button");
-    btn.id = 'branch-instance-' + branchIndex;
-    btn.classList.add('branch-instance');
-    btn.innerText = 'Restore ' + branchIndex;
-    btn.onclick = () => restoreBranch(branchIndex);
-
-    onFunctionEvent(branchDeleted, btn.id, (deletedBranchIndex) => {
+    const btn = new ButtonType('branch-instance' + branchIndex, 'Restore ' + branchIndex,
+        () => restoreBranch(branchIndex), false);
+    btn.createElementIn(controlsScreenElement);
+    btn.onFunctionEvent(branchDeleted, (deletedBranchIndex) => {
         if (branchIndex === deletedBranchIndex) {
-            removeFunctionEvents(btn.id);
-            btn.remove();
+            btn.deleteEl();
         }
     });
-    controlsScreenElement.appendChild(btn);
 }
 

@@ -6,8 +6,6 @@ import {updateTileState} from "./gameStateManager.js";
 
 const solveObjects = [];
 
-// document.addEventListener('new-game', () => setTimeout(resetSolver, 1000));
-
 export function resetSolver() {
     solveObjects.length = 0;
 
@@ -31,173 +29,21 @@ export function resetSolver() {
     console.log(solveObjects);
 }
 
-
-export function fillNegativeSpaces() {
-    for (const obj of solveObjects) {
-        if (obj.tiles.length === 0) continue; //obj already solved
-        trimChainSequence(obj);
-
-        //this logic is designed initially for just 1 chain
-        if (obj.sequence.length !== 1) continue;
-        const chainLength = obj.sequence[0];
-
-        let firstClick1 = null;
-        let lastClick2 = -1; // (essentially, makes the logic easier)
-        for (let i = 0; i < obj.tiles.length; i++) {
-            if (obj.tiles[i].state === 'unclicked') {
-                //    can't reach this distance on rightmost side
-                if (firstClick1 !== null) {
-                    if (firstClick1 + chainLength <= i) {
-                        updateTileState(obj.tiles[i], 'click2');
-                        lastClick2 = i;
-                    }
-                }
-
-            } else if (obj.tiles[i].state === 'click1') {
-                //if this is the first edge of click1, leftmost tile is limited
-                if (firstClick1 === null) {
-                    if (i - chainLength > lastClick2) {
-                        for (let j = lastClick2 + 1; j < i - chainLength + 1; j++) {
-                            updateTileState(obj.tiles[j], 'click2');
-                        }
-                        lastClick2 = i;
-                    }
-                }
-                firstClick1 = i;
-
-            } else if (obj.tiles[i].state === 'click2') {
-                if (firstClick1 === null) {
-                    //    no click1 found yet, but could be here if the size fits,
-                    //    if size doesn't fit we know it's click2
-                    if (i - lastClick2 - 1 < chainLength) {
-                        console.log(i, lastClick2);
-                        //fill in all between this gap as click2 since it can't fit here
-                        for (let j = lastClick2 + 1; j < i; j++) {
-                            updateTileState(obj.tiles[j], 'click2');
-                        }
-                    }
-                } else {
-                    //    row already has some filled previously, so everything after this is click2
-                    for (let j = i; j < obj.tiles.length; j++) {
-                        updateTileState(obj.tiles[j], 'click2');
-                    }
-                    //remove all the extra tiles (ie. trim)
-                    obj.tiles.length = i - 1;
-                    break;
-                }
-                lastClick2 = i;
-            }
-        }
-
-        //    check for space at the end
-        if (chainLength > obj.tiles.length - lastClick2 - 1) {
-            for (let j = lastClick2 + 1; j < obj.tiles.length; j++) {
-                updateTileState(obj.tiles[j], 'click2');
-            }
-        }
-
-    } //solveObjects
-}
-
-
-export function solvePartialSingleChain() {
-    for (const obj of solveObjects) {
-        if (obj.tiles.length === 0) continue; //obj already solved
-        trimChainSequence(obj);
-        console.log('---');
-        //this logic is designed initially for just 1 chain
-        if (obj.sequence.length !== 1) return;
-
-        const chainLength = obj.sequence[0];
-        // for a single sequence, a clicked tile means its touching here
-        let flex = 0; //space to the left of chain (which could be on either side)
-        let firstFill = null; // start of the chain known
-        let lastFill = null // end of the chain known
-        let lastClick2 = null; //click2 pointer to track spaces
-        for (let i = 0; i < obj.tiles.length; i++) {
-            if (obj.tiles[i].state === 'unclicked') {
-                if (firstFill === null) {
-                    flex++;
-                } else if (flex === 0) {
-                    //    if it's the first tile, fill until it reaches chain length
-                    if (chainLength > i - firstFill) {
-                        lastFill = i;
-                        updateTileState(obj.tiles[i], 'click1');
-                    } else {
-                        //    chain length already met
-                        updateTileState(obj.tiles[i], 'click2');
-                    }
-
-                }
-            } else if (obj.tiles[i].state === 'click1') {
-                if (firstFill === null && flex === 0) {
-                    //    start of the tiles, so fill all
-                    firstFill = 0;
-                    lastFill = chainLength - 1;
-                    break;
-                }
-                if (firstFill === null) {
-                    firstFill = i;
-                    flex++;
-                }
-                lastFill = i;
-                //    click2 create bounds of where this can exist
-            } else if (obj.tiles[i].state === 'click2') {
-                if (firstFill === null) {
-                    //    no click1 found yet, but could be here if the size fits,
-                    //    if size doesn't fit we know it's click2
-                    if (i - lastClick2 < chainLength) {
-                        //fill in all between this gap as click2 since it can't fit here
-                        for (let j = lastClick2; j < i; j++) {
-                            updateTileState(obj.tiles[j], 'click2');
-                        }
-                    }
-                } else {
-                    //    row already has some filled previously, so everything after this is click2
-                    updateTileState(obj.tiles[i], 'click2');
-                }
-                lastClick2 = i;
-            }
-
-            console.log(obj.type, obj.sequence, i, flex, firstFill, lastFill);
-        }
-
-        if (firstFill && lastFill) {
-            // fill based on known start/ends
-            for (let i = 0; i < obj.tiles.length; i++) {
-                //guarenteed in the set
-                if (firstFill <= i && i <= lastFill) {
-                    updateTileState(obj.tiles[i], 'click1');
-                    //    within the possibility, but not guarenteed, so unclicked
-                } else if (firstFill - flex <= i && i <= lastFill + flex) {
-
-                }
-            }
-        }
-
-    }
-}
-
-export function findPermutations() {
+export function solveAll() {
+    //since we're gonna do the whole thing, take the time to reset solver
     resetSolver();
-//    build all possible combinations of using the chains
-//    if a tile is click1 or click2 for every permutation, it must always be that
-//     this should handle:
-//     solve span match
-//     clik1 done
-//     solves ones
+    while (solveOne()) ;
+    console.log('All solved');
+}
 
-    let movesMade = 0;
-
+// function runs until it finds one move to make then returns true (or false if no move found).
+export function solveOne() {
+    //don't auto reset solver, because it only needs to be built once per new-game
     for (const obj of solveObjects) {
-        console.log('START ', obj.type, obj.sequence);
         // obj already solved
         if (obj.tiles.find(tile => tile.state === 'unclicked') === undefined) continue;
 
         const result = getPossibleMatches(obj.tiles.map(tile => tile.state), obj.sequence, 0);
-        console.log('FINAL', obj.type, obj.sequence, result);
-        console.log('');
-        console.log('');
 
         if (!result) {
             console.error(obj);
@@ -210,6 +56,7 @@ export function findPermutations() {
 
             let hasClick1 = false;
             let hasClick2 = false;
+            // if every possible match has a tile in a specific state, we know it must be that state
             for (const possibleMatch of result) {
                 // could break from here, but roughly same speed given data sets
                 if (possibleMatch[i] === click1Match) {
@@ -223,23 +70,24 @@ export function findPermutations() {
                 //    still unknown/unclicked, do nothing
             } else if (hasClick1 && !hasClick2) {
                 updateTileState(obj.tiles[i], 'click1');
-                movesMade++;
+                return true; //each click only does one move
             } else if (!hasClick1 && hasClick2) {
                 updateTileState(obj.tiles[i], 'click2');
-                movesMade++;
+                return true; //each click only does one move
             } else {
                 throw new Error('Impossible, maybe this is empty array?');
             }
         }
     }
 
-    console.log('TOTAL MOVES MADE', movesMade);
+    return false;
 }
 
 //root solve object, 0 - click2, 1 - click1
 const click2Match = 0;
 const click1Match = 1;
 
+// builds array of all possible state combinations that meet the chainSequence needs
 function getPossibleMatches(rootTilesStates, remainingSequence, currentIndex) {
     const result = [];
 
@@ -324,18 +172,4 @@ function getPossibleMatches(rootTilesStates, remainingSequence, currentIndex) {
 
     console.log(result);
     return result;
-}
-
-
-function trimChainSequence(obj) {
-    // remove tiles from ends of array since they provide no information
-    if (obj.tiles.length === 0) {
-        return;
-    } else if (obj.tiles[0].state === 'click2') {
-        obj.tiles.shift();
-        trimChainSequence(obj);
-    } else if (obj.tiles[obj.tiles.length - 1].state === 'click2') {
-        obj.tiles.pop();
-        trimChainSequence(obj);
-    }
 }

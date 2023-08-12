@@ -15,6 +15,7 @@ import gameData from "./game/gameData.js";
 import {createTimerElement} from "./ui/timerElement.js";
 import {createControlsScreen} from "./ui/controlsScreen.js";
 import {startLogMoveHistory} from "./game/moveHistory.js";
+import {resetSolver} from "./game/gameSolver.js";
 
 function updateBoard() {
     console.log('new-game');
@@ -52,6 +53,7 @@ function updateBoard() {
 
     startLogMoveHistory();
 
+    resetSolver();
 }
 
 function saveAndLogTime() {

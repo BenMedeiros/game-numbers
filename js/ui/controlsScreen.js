@@ -10,16 +10,14 @@ import {
     onFunctionEvent,
 } from "../common/eventHandler.js";
 import {ButtonType} from "../html/tinyComponents/ButtonType.js";
-import {fillNegativeSpaces, findPermutations, solvePartialSingleChain} from "../game/gameSolver.js";
+import {solveAll, solveOne} from "../game/gameSolver.js";
 
 const mainTag = document.getElementById("main");
 
 let controlsScreenElement = null;
-document.addEventListener('new-game', () => {
-    if (controlsScreenElement) controlsScreenElement.remove();
-})
 
 export function createControlsScreen() {
+    if (controlsScreenElement) controlsScreenElement.remove();
     const el = document.createElement("div");
     el.id = 'controls-screen';
     el.classList.add('controls');
@@ -28,11 +26,8 @@ export function createControlsScreen() {
     textEl.innerText = 'Controls';
     el.appendChild(textEl);
 
-    new ButtonType('solve', 'Solve Partial Single Chain', solvePartialSingleChain).createElementIn(el);
-    new ButtonType('solve', 'Fill Negative Spaces', fillNegativeSpaces).createElementIn(el);
-    new ButtonType('solve', 'Find Permutations', findPermutations).createElementIn(el);
-
-
+    new ButtonType('solve', 'Solve 1', solveOne).createElementIn(el);
+    new ButtonType('solve', 'Solve All', solveAll).createElementIn(el);
 
     const undoBtn = new ButtonType('undo-btn', null, undoLastMove, true, 'undo');
     undoBtn.createElementIn(el);

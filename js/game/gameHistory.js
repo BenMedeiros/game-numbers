@@ -3,7 +3,9 @@
 const history = JSON.parse(localStorage.getItem('history')) || [];
 
 function saveCompletedGame(gameConfig, gameData) {
-    if(history.length > 1000) console.warn('Review history truncation');
+    if(history.length > 1000) {
+        history.shift();
+    }
 
     history.push({
         numCols: gameConfig.numCols,

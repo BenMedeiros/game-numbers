@@ -2,6 +2,7 @@
 
 import {ButtonType} from "../html/tinyComponents/ButtonType.js";
 import {LabelInputType} from "../html/tinyComponents/LabelInputType.js";
+import gameConfig from "../game/gameConfig.js";
 
 export function populateSettingsElementFromConfig(gameConfig, fieldNames) {
     for (const fieldName of fieldNames) {
@@ -78,3 +79,12 @@ createSettingsComponent([
     new LabelInputType('gameId', 'string', 'Game Id', null, 'auto', true),
     new LabelInputType('autoNewGame', 'checkbox', 'Auto New Game')
 ]);
+
+// automatically start next game
+document.addEventListener('game-won', () => {
+    if (gameConfig.autoNewGame) {
+        setTimeout(() => {
+            document.dispatchEvent(new Event('new-game'));
+        }, 500);
+    }
+});

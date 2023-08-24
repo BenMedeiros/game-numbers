@@ -48,3 +48,7 @@
         margin: .2rem;
     }
 }
+
+#controls-screen > button#solve-1, button#solve-all {
+    display: none;
+}

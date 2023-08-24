@@ -1,0 +1,46 @@
+#help-screen, #help-screen * {
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+#help-screen {
+    margin: 0;
+    top: 0;
+    /*left: 0;*/
+    right: 0;
+    /*bottom: 0;*/
+
+    background-color: var(--color-menu-backdrop);
+    color: var(--color-menu-border);
+    border: 1px solid var(--color-menu-border);
+    border-radius: .5rem;
+
+    height: 94%;
+    width: 40%;
+    overflow: auto;
+    position: absolute;
+    padding: 2%;
+    font-size: larger;
+
+}
+
+@media (max-aspect-ratio: 5/8) {
+    #help-screen {
+        height: 80%;
+        width: 90%;
+    }
+}
+
+#help-screen.collapsed {
+    height: 2rem;
+    width: 3rem;
+    padding: 1rem;
+}
+
+#help-screen.collapsed > h3 {
+    margin: 0;
+}
+
+#help-screen.collapsed > p {
+    display: none;
+}

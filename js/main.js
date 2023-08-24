@@ -7,7 +7,6 @@ import {
     populateSettingsElementFromConfig,
     updateConfigFromUiElement
 } from "./ui/settingsController.js";
-import winScreen from "./ui/winScreen.js";
 import {randomInt} from "./common/utils.js";
 import {saveCompletedGame} from "./game/gameHistory.js";
 import gameConfig from "./game/gameConfig.js";
@@ -16,6 +15,7 @@ import {createTimerElement} from "./ui/timerElement.js";
 import {createControlsScreen} from "./ui/controlsScreen.js";
 import {startLogMoveHistory} from "./game/moveHistory.js";
 import {resetSolver} from "./game/gameSolver.js";
+import {createHelpScreen} from "./ui/helpScreen.js";
 
 function updateBoard() {
     console.log('new-game');
@@ -68,14 +68,8 @@ function saveAndLogTime() {
 populateSettingsElementFromConfig(gameConfig, ['numCols', 'numRows', 'tileSize', 'autoNewGame']);
 document.addEventListener('new-game', updateBoard);
 
-// automatically start next game
-document.addEventListener('game-won', () => {
-    if (gameConfig.autoNewGame) {
-        setTimeout(() => {
-            document.dispatchEvent(new Event('new-game'));
-        }, 500);
-    }
-});
+createHelpScreen();
+
 
 export default {
     getGameData: () => gameData

@@ -26,8 +26,8 @@ export function createControlsScreen() {
     textEl.innerText = 'Controls';
     el.appendChild(textEl);
 
-    new ButtonType('solve', 'Solve 1', solveOne).createElementIn(el);
-    new ButtonType('solve', 'Solve All', solveAll).createElementIn(el);
+    new ButtonType('solve-1', 'Solve 1', solveOne).createElementIn(el);
+    new ButtonType('solve-all', 'Solve All', solveAll).createElementIn(el);
 
     const undoBtn = new ButtonType('undo-btn', null, undoLastMove, true, 'undo');
     undoBtn.createElementIn(el);

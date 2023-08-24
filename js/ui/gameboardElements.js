@@ -64,12 +64,10 @@ function drawTileElements(gameboardElement, gameData) {
             updateTileStateAndElementDrag(tile, el, 'click2')
         });
 
-        //on iOS/Safari, long press doesn't count as right click (like it does for Android/Chrome)
-        if (navigator.platform === 'iPad' || navigator.platform === 'iPhone' || navigator.platform === 'iPod') {
-            onTouchLongPress(el, 700, () => {
-                updateTileStateAndElementToClick2(tile, el);
-            });
-        }
+        onTouchLongPress(el, 400, () => {
+            updateTileStateAndElementToClick2(tile, el);
+        });
+
     }
 
     drawHeaderTileElements(gameData, gameboardElement, fragment);

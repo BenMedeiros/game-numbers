@@ -57,3 +57,8 @@
     box-shadow: none;
     background-color: var(--color-menu-subtext);
 }
+
+#win-screen > img {
+    height: 6rem;
+    margin: 1rem;
+}

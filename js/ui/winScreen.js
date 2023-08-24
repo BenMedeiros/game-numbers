@@ -17,6 +17,10 @@ function createWinScreen(labelInputs) {
     div.innerText = 'YOU WIN';
     el.appendChild(div);
 
+    const img = document.createElement("img");
+    img.src = 'img/pokemon/gifs/pikachu_dancing.gif';
+    el.appendChild(img);
+
     for (const labelInput of labelInputs) {
         labelInput.createElementIn(el);
     }

@@ -77,7 +77,6 @@ document.addEventListener('game-won', () => {
     }
 });
 
-
 export default {
     getGameData: () => gameData
 }

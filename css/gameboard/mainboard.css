@@ -1,7 +1,7 @@
 body {
     background-size: 50%;
     background-color: darkgrey;
-    background-image:  url(/game-numbers/img/pokemon/backgrounds/background_line_art_1.jpg);
+    background-image: url(/game-numbers/img/pokemon/backgrounds/background_line_art_1.jpg);
     background-blend-mode: multiply;
 }
 
@@ -115,4 +115,12 @@ i {
 
 .chain-found {
     opacity: .3;
+}
+
+@media (max-aspect-ratio: 5/8) {
+    .gameboard {
+        max-width: 95%;
+        max-height: 80%;
+        margin-top: 30%;
+    }
 }

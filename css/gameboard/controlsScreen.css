@@ -17,14 +17,6 @@
     border-radius: .5rem;
 }
 
-@media (max-aspect-ratio: 5/8) {
-    #controls-screen {
-        margin: 0;
-        display: flex;
-        flex-wrap: wrap;
-    }
-}
-
 #controls-screen > h3 {
     margin: .5rem;
 }
@@ -38,4 +30,21 @@
 #controls-screen button:hover:not(:disabled) {
     border-color: darkgreen;
     border-width: .1rem;
+}
+
+@media (max-aspect-ratio: 5/8) {
+    #controls-screen {
+        margin: 0;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    #controls-screen > h3 {
+        margin: .2rem;
+    }
+
+    #controls-screen > button {
+        padding: .2rem;
+        margin: .2rem;
+    }
 }

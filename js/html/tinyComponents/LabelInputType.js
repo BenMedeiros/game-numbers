@@ -1,5 +1,7 @@
 'use strict';
 
+const supportedTypes = ['number', 'string', 'checkbox'];
+
 export class LabelInputType {
     parentsElements = [];
 
@@ -10,6 +12,10 @@ export class LabelInputType {
         this.value = value;
         this.placeholder = placeholder;
         this.readOnly = readOnly;
+
+        if(supportedTypes.indexOf(type) === -1){
+            throw new Error('Only supported types are: '+supportedTypes.join(', '));
+        }
     }
 
     createElementIn(parentEl) {
@@ -28,7 +34,13 @@ export class LabelInputType {
         inputEl.type = this.type;
         inputEl.id = this.name;
         inputEl.name = this.name;
-        if (this.value !== undefined) inputEl.value = this.value;
+        if (this.value !== undefined) {
+            if(this.type === 'checkbox'){
+                inputEl.checked = true;
+            }else{
+                inputEl.value = this.value;
+            }
+        }
         if (this.placeholder !== undefined) inputEl.placeholder = this.placeholder;
         if (this.readOnly) inputEl.readOnly = true;
         divEl.appendChild(inputEl);

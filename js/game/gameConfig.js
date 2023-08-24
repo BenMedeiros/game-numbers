@@ -7,7 +7,8 @@ const gameConfig = {
     numRows: 5,
     tileSize: 3,
     //gameId is a int[] so that any number of tiles can be supported
-    gameIdPartitioned: []
+    gameIdPartitioned: [],
+    autoNewGame: false
 };
 
 Object.assign(gameConfig, JSON.parse(localStorage.getItem('gameConfig')));

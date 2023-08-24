@@ -6,7 +6,7 @@ import {drawTileElements, newGameBoardElement} from "./ui/gameboardElements.js";
 import {
     populateSettingsElementFromConfig,
     updateConfigFromUiElement
-} from "../components/settingsComponent/settingsController.js";
+} from "./ui/settingsController.js";
 import winScreen from "./ui/winScreen.js";
 import {randomInt} from "./common/utils.js";
 import {saveCompletedGame} from "./game/gameHistory.js";
@@ -20,7 +20,7 @@ import {resetSolver} from "./game/gameSolver.js";
 function updateBoard() {
     console.log('new-game');
 
-    updateConfigFromUiElement(gameConfig, ['numCols', 'numRows', 'tileSize']);
+    updateConfigFromUiElement(gameConfig, ['numCols', 'numRows', 'tileSize', 'autoNewGame']);
     gameConfig.gameId = randomInt(0, 1 << 30) + '-' + randomInt(0, 1 << 30);
     populateSettingsElementFromConfig(gameConfig, ['gameId']);
     localStorage.setItem('gameConfig', JSON.stringify(gameConfig));
@@ -65,14 +65,16 @@ function saveAndLogTime() {
     clearInterval(gameData.intervalId);
 }
 
-populateSettingsElementFromConfig(gameConfig, ['numCols', 'numRows', 'tileSize']);
+populateSettingsElementFromConfig(gameConfig, ['numCols', 'numRows', 'tileSize', 'autoNewGame']);
 document.addEventListener('new-game', updateBoard);
 
 // automatically start next game
 document.addEventListener('game-won', () => {
-    setTimeout(() => {
-        document.dispatchEvent(new Event('new-game'));
-    }, 500);
+    if (gameConfig.autoNewGame) {
+        setTimeout(() => {
+            document.dispatchEvent(new Event('new-game'));
+        }, 500);
+    }
 });
 
 

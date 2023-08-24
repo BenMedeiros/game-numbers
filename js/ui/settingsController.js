@@ -1,12 +1,16 @@
 'use strict';
 
-import {ButtonType} from "../../js/html/tinyComponents/ButtonType.js";
-import {LabelInputType} from "../../js/html/tinyComponents/LabelInputType.js";
+import {ButtonType} from "../html/tinyComponents/ButtonType.js";
+import {LabelInputType} from "../html/tinyComponents/LabelInputType.js";
 
 export function populateSettingsElementFromConfig(gameConfig, fieldNames) {
     for (const fieldName of fieldNames) {
         const el = document.getElementById(fieldName);
-        el.value = gameConfig[fieldName];
+        if(el.type === 'checkbox'){
+            el.checked =gameConfig[fieldName];
+        }else{
+            el.value = gameConfig[fieldName];
+        }
     }
 }
 
@@ -18,6 +22,8 @@ export function updateConfigFromUiElement(gameConfig, fieldNames) {
             gameConfig[fieldName] = Number(el.value);
         } else if (el.type === 'string') {
             gameConfig[fieldName] = String(el.value);
+        } else if (el.type === 'checkbox') {
+            gameConfig[fieldName] = el.checked;
         } else {
             gameConfig[fieldName] = el.value;
         }
@@ -69,5 +75,6 @@ createSettingsComponent([
     new LabelInputType('numRows', 'number', 'Rows'),
     new LabelInputType('numCols', 'number', 'Cols'),
     new LabelInputType('tileSize', 'number', 'Tile Size'),
-    new LabelInputType('gameId', 'string', 'Game Id', null, 'auto', true)
+    new LabelInputType('gameId', 'string', 'Game Id', null, 'auto', true),
+    new LabelInputType('autoNewGame', 'checkbox', 'Auto New Game')
 ]);

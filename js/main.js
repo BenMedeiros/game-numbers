@@ -72,6 +72,9 @@ document.addEventListener('new-game', updateBoard);
 
 createHelpScreen();
 
+//start game automatically
+setTimeout(updateBoard, 1000);
+
 
 export default {
     getGameData: () => gameData

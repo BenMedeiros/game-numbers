@@ -32,15 +32,20 @@
 }
 
 #help-screen.collapsed {
-    height: 2rem;
-    width: 3rem;
-    padding: 1rem;
+    height: auto;
+    width: auto;
+    padding: .5rem;
 }
 
-#help-screen.collapsed > h3 {
+#help-screen.collapsed > h2 {
     margin: 0;
 }
 
-#help-screen.collapsed > p {
+#help-screen.collapsed h3, #help-screen.collapsed h4, #help-screen.collapsed p, #help-screen.collapsed span {
     display: none;
+}
+
+#help-screen span {
+    position: initial;
+    padding-inline: .4rem;
 }

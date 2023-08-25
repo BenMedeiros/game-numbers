@@ -16,6 +16,8 @@ import {createControlsScreen} from "./ui/controlsScreen.js";
 import {startLogMoveHistory} from "./game/moveHistory.js";
 import {resetSolver} from "./game/gameSolver.js";
 import {createHelpScreen} from "./ui/helpScreen.js";
+//just to run it
+import winScreen from "./ui/winScreen.js";
 
 function updateBoard() {
     console.log('new-game');

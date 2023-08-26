@@ -6,7 +6,7 @@ import gameConfig from "../game/gameConfig.js";
 import {LabelInputType} from "../html/tinyComponents/LabelInputType.js";
 import {ButtonType} from "../html/tinyComponents/ButtonType.js";
 
-function createWinScreen(labelInputs) {
+function createWinScreen(isWin, titleText, labelInputs) {
     if (winScreenOpen) return;
 
     const el = document.createElement("div");
@@ -14,14 +14,17 @@ function createWinScreen(labelInputs) {
     el.classList.add('win-screen');
 
     const div = document.createElement("div");
-    div.innerText = 'YOU WIN';
+    div.innerText = titleText;
     el.appendChild(div);
 
-    const img = document.createElement("img");
-    img.src = 'img/pokemon/gifs/pikachu_dancing.gif';
-    el.appendChild(img);
+    if (isWin) {
+        const img = document.createElement("img");
+        img.src = 'img/pokemon/gifs/pikachu_dancing.gif';
+        el.appendChild(img);
+    }
 
     for (const labelInput of labelInputs) {
+        if (!labelInput) continue;
         labelInput.createElementIn(el);
     }
 
@@ -34,7 +37,6 @@ function createWinScreen(labelInputs) {
 
 function closeWinScreen() {
     if (!winScreenOpen) return;
-    console.log('closing');
     const oldGameboardElement = document.getElementById("win-screen");
     oldGameboardElement.remove();
     winScreenOpen = false;
@@ -44,13 +46,24 @@ function closeWinScreen() {
 let winScreenOpen = false;
 
 document.addEventListener('game-won', () => {
-    createWinScreen([
+    const labelsInputs = [
         new LabelInputType('numRows', 'number', 'Rows', gameConfig.numRows, null, true),
         new LabelInputType('numCols', 'number', 'Cols', gameConfig.numCols, null, true),
         new LabelInputType('gameId', 'string', 'Game Id', gameConfig.gameId, null, true),
         new LabelInputType('timeElapsed', 'number', 'Time', gameData.timeElapsed, null, true),
         new LabelInputType('bestTime', 'number', 'Record', getBestTimeForSize(gameConfig), null, true)
-    ]);
+    ];
+
+    if (gameData.timeToBeat) {
+        labelsInputs.push(new LabelInputType('timeToBeat', 'number', 'Challenger\'s Time', gameData.timeToBeat, null, true));
+        if (gameData.timeElapsed > gameData.timeToBeat) {
+            createWinScreen(false, 'YOU LOST YOUR CHALLENGE', labelsInputs);
+        } else {
+            createWinScreen(true, 'YOU WON YOUR CHALLENGE', labelsInputs);
+        }
+    } else {
+        createWinScreen(true, 'YOU WIN', labelsInputs);
+    }
 });
 document.addEventListener('new-game', closeWinScreen);
 

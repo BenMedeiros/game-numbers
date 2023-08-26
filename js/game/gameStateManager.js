@@ -22,7 +22,6 @@ export function evalGameComplete() {
     }
 
     if (userWin) {
-        console.log('YOU WIN');
         document.dispatchEvent(new CustomEvent('game-won', {detail: {gameData, gameConfig}}));
     }
 

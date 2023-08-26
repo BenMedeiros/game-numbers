@@ -49,7 +49,6 @@ export class ButtonType {
 
         parentEl.appendChild(btnEl);
         this.elements.push(btnEl);
-        console.log(this.elements);
         this.parentsElements.push(parentEl);
     }
 

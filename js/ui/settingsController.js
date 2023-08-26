@@ -4,7 +4,7 @@ import {ButtonType} from "../html/tinyComponents/ButtonType.js";
 import {LabelInputType} from "../html/tinyComponents/LabelInputType.js";
 import gameConfig from "../game/gameConfig.js";
 
-export function populateSettingsElementFromConfig(gameConfig, fieldNames) {
+export function populateSettingsElementFromConfig( fieldNames) {
     for (const fieldName of fieldNames) {
         const el = document.getElementById(fieldName);
         if(el.type === 'checkbox'){
@@ -16,7 +16,7 @@ export function populateSettingsElementFromConfig(gameConfig, fieldNames) {
 }
 
 // uses type from the UI config
-export function updateConfigFromUiElement(gameConfig, fieldNames) {
+export function updateConfigFromUiElement( fieldNames) {
     for (const fieldName of fieldNames) {
         const el = document.getElementById(fieldName);
         if (el.type === 'number') {
@@ -56,15 +56,15 @@ export function createSettingsComponent(labelInputs) {
 
     const submit = new ButtonType('submit', 'New Game', 'new-game');
     submit.createElementIn(settingsElementForm);
+    //start collapsed
+    settingsElementForm.classList.add('collapsed');
 
     document.addEventListener('click', (event) => {
-        console.log('clicked outside');
         if (!settingsElementForm.classList.contains('collapsed')) {
             settingsElementForm.classList.add('collapsed');
         }
     });
     settingsElementForm.addEventListener('click', (event) => {
-        console.log('clicked inside');
         event.stopPropagation();
         if (settingsElementForm.classList.contains('collapsed')) {
             settingsElementForm.classList.remove('collapsed');

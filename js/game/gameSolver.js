@@ -25,8 +25,6 @@ export function resetSolver() {
             tiles: gameData.tiles.filter(el => el.x === i)
         });
     }
-
-    console.log(solveObjects);
 }
 
 export function solveAll() {
@@ -170,6 +168,5 @@ function getPossibleMatches(rootTilesStates, remainingSequence, currentIndex) {
         return false;
     }
 
-    console.log(result);
     return result;
 }

@@ -11,7 +11,9 @@ const gameData = {
     headerTiles: [],
     startTime: new Date(),
     timeElapsed: 0,
-    intervalId: null
+    intervalId: null,
+    //for challenges sent by url
+    timeToBeat: null
 };
 
 export default gameData;

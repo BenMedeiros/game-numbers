@@ -66,18 +66,19 @@ export function createHelpScreen() {
     helpScreenElement = page.createElementIn(mainTag);
 
     helpScreenElement.addEventListener('click', (event) => {
-        console.log('clicked inside');
         event.stopPropagation();
-        if (helpScreenElement.classList.contains('collapsed')) {
-            helpScreenElement.classList.remove('collapsed');
-        }
+        expandHelpScreen();
+
     });
 }
 
+export function collapseHelpScreen(){
+    helpScreenElement.classList.add('collapsed');
+}
 
-document.addEventListener('click', (event) => {
-    console.log('clicked outside');
-    if (!helpScreenElement.classList.contains('collapsed')) {
-        helpScreenElement.classList.add('collapsed');
-    }
-});
+export function expandHelpScreen(){
+    helpScreenElement.classList.remove('collapsed');
+}
+
+document.addEventListener('click', collapseHelpScreen);
+

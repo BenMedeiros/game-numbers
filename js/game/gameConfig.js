@@ -3,12 +3,13 @@
 import {randomInt} from "../common/utils.js";
 
 const gameConfig = {
-    numCols: 4,
+    numCols: 5,
     numRows: 5,
-    tileSize: 3,
+    tileSize: 4,
     //gameId is a int[] so that any number of tiles can be supported
     gameIdPartitioned: [],
-    autoNewGame: false
+    autoNewGame: false,
+    newPlayer: true
 };
 
 Object.assign(gameConfig, JSON.parse(localStorage.getItem('gameConfig')));
